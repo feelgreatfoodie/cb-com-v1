@@ -3,7 +3,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import * as THREE from 'three';
 import { SceneManager } from '@/lib/three/scene-manager';
-import { DataStream } from '@/lib/three/data-stream';
+import { AmbientStream } from '@/lib/three/ambient-stream';
 import { useReducedMotion } from '@/lib/hooks/useReducedMotion';
 import { useDeviceType } from '@/lib/hooks/useDeviceType';
 
@@ -18,9 +18,11 @@ const STREAM_CONFIGS = [
   { id: 'poker' as const, color: 0xffd700, lane: 1 },
 ];
 
+const PARTICLE_COUNTS = { desktop: 40, tablet: 25, mobile: 15 };
+
 export function NoteHighway({ scrollSpeed, pausedStreams }: NoteHighwayProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const streamsRef = useRef<Map<string, DataStream>>(new Map());
+  const streamsRef = useRef<Map<string, AmbientStream>>(new Map());
   const prefersReduced = useReducedMotion();
   const device = useDeviceType();
 
@@ -33,25 +35,25 @@ export function NoteHighway({ scrollSpeed, pausedStreams }: NoteHighwayProps) {
       pixelRatio: device.pixelRatio,
     });
 
-    manager.camera.position.set(0, 0, 4);
-    manager.camera.lookAt(0, 0, -10);
+    manager.camera.position.set(0, 0, 5);
+    manager.camera.lookAt(0, 0, 0);
 
-    const particleCount = Math.floor(device.particleCount * 0.3);
+    const particleCount = PARTICLE_COUNTS[device.type];
 
     STREAM_CONFIGS.forEach(({ id, color, lane }) => {
-      const stream = new DataStream({
+      const stream = new AmbientStream({
         color: new THREE.Color(color),
         count: particleCount,
-        speed: 0.12,
+        speed: 0.01,
         lane,
       });
       streamsRef.current.set(id, stream);
       manager.scene.add(stream.group);
     });
 
-    manager.setUpdateCallback((delta) => {
+    manager.setUpdateCallback((delta, elapsed) => {
       streamsRef.current.forEach((stream) => {
-        stream.update(delta, scrollSpeed);
+        stream.update(delta, elapsed, scrollSpeed);
       });
     });
 
