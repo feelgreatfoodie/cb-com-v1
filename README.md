@@ -1,6 +1,6 @@
 # Ribeira Quest
 
-Gamified personal branding site for Christian Bourlier — Technical Solutions Partner. A scroll-driven single-page experience with Three.js scenes, animated reveals, and an admin-controlled palette system.
+Gamified personal branding site for Christian Bourlier — Technical Solutions Partner. A scroll-driven single-page experience with Three.js scenes, animated reveals, palette-matched one-sheeter downloads, and a visitor-facing palette switcher.
 
 **Live:** [christianbourlier.com](https://christianbourlier.com)
 
@@ -14,20 +14,25 @@ The site doubles as a technical showcase: shader-based river animation, GPU part
 
 | Section | Component | What it does |
 |---------|-----------|-------------|
+| **Header** | `Header` | Sticky glass header with contact icons, section nav, and palette switcher dropdown. |
 | **Hero** | `HeroSection` + `RiverScene` | Animated headline over a GLSL shader river with floating particles. CTA scrolls to Journey. |
-| **Journey** | `JourneySection` + `NoteHighway` | Three skill stream cards (Data / Sales / Poker) with click-to-reveal loot boxes. Background has Three.js ambient particle streams that pause on card hover. |
+| **Journey** | `JourneySection` + `NoteHighway` | Three skill stream cards (Data / Sales / Poker) with click-to-reveal loot boxes. Background has Three.js ambient particle streams. |
+| **Competencies** | `CompetencyHubSection` + `RadialHub` | Animated SVG radial hub-and-spoke diagram (desktop) with 6 core competencies orbiting a center node. Falls back to 2-column card grid on mobile. |
+| **Open To** | `OpenToSection` + `RoleCard` | 4 glass cards for target roles (Solutions Architect, AI/ML Solutions Engineer, TAM, AI Strategist) with "what I bring" pill tags. |
 | **Workshop** | `WorkshopSection` + `TypewriterCLI` | Three project cards (OptiMeasure, CacheBash, AI Portal) with a looping terminal typewriter demo. |
-| **Boss Fight** | `BossFightSection` + `EquationVisual` + `ArchitectureMap` | Animated equation reveal, SVG architecture flow diagram, and testimonial card. |
-| **Footer** | `Footer` | Contact links with hover glow effects. Hidden gear icon links to `/admin`. |
+| **Boss Fight** | `BossFightSection` + `TestimonialCarousel` | Animated equation reveal, SVG architecture flow diagram, and 6-testimonial auto-advancing carousel with LinkedIn recommendations. |
+| **Implementation** | `ImplementationSection` + `SkillPill` + `CertBadge` | 16 category-colored skill pills (language/cloud/data/ai) and GCP certification badges (PDE, PCA). |
+| **One-Sheeter** | `OneSheeterSection` + `PDFPreview` | Palette-matched PDF download. Serves the correct one-sheeter for the active palette from `/public/onesheets/`. |
+| **Footer** | `Footer` | Signature animation reveal, section nav, contact links, download CTA, and hidden admin gear icon. |
 
 ## Tech Stack
 
 - **Framework:** Next.js 16 (App Router, async Server Components)
 - **UI:** React 19, Tailwind CSS 4, Framer Motion
 - **3D:** Three.js with custom GLSL shaders
-- **State:** Zustand (quest progression)
-- **Auth:** Auth.js v5 (Google OAuth)
-- **Storage:** Vercel Edge Config (palette persistence)
+- **State:** Zustand (quest progression, section tracking, download state)
+- **Auth:** Auth.js v5 (Google OAuth for admin)
+- **Storage:** Vercel Edge Config (admin palette), localStorage (visitor palette)
 - **Deployment:** Vercel
 
 ## Architecture
@@ -36,7 +41,7 @@ The site doubles as a technical showcase: shader-based river animation, GPU part
 src/
 ├── app/
 │   ├── layout.tsx          # Async — reads palette from Edge Config, injects CSS vars on <html>
-│   ├── page.tsx            # Main page composing all sections
+│   ├── page.tsx            # Main page composing all sections + easter eggs
 │   ├── globals.css         # @theme inline registrations, glassmorphism, scrollbar
 │   ├── admin/
 │   │   ├── page.tsx        # Auth-gated server component
@@ -47,26 +52,32 @@ src/
 ├── components/
 │   ├── hero/               # HeroSection, RiverScene (Three.js shader river)
 │   ├── journey/            # JourneySection, NoteHighway (particle streams), StreamCard, LootBox
+│   ├── competencies/       # CompetencyHubSection, RadialHub (animated SVG)
+│   ├── opento/             # OpenToSection, RoleCard (glass cards + pill tags)
 │   ├── workshop/           # WorkshopSection, ProjectCard, TypewriterCLI
-│   ├── bossfight/          # BossFightSection, EquationVisual, ArchitectureMap (SVG)
-│   ├── layout/             # Footer, ScrollProgress
-│   └── ui/                 # Button, GlowText
+│   ├── bossfight/          # BossFightSection, EquationVisual, ArchitectureMap, TestimonialCarousel
+│   ├── implementation/     # ImplementationSection, SkillPill, CertBadge
+│   ├── download/           # OneSheeterSection, PDFPreview
+│   ├── layout/             # Header, Footer, ScrollProgress
+│   └── ui/                 # Button, GlowText, KonamiOverlay, CursorTrail
 ├── config/
 │   ├── palettes.ts         # 8 palette definitions + types
-│   ├── content.ts          # All copy/text content
+│   ├── content.ts          # All copy/text content (hero, journey, competencies, openTo, workshop, bossfight, implementation, oneSheeter, footer)
+│   ├── onesheet-map.ts     # Palette ID → PDF path + preview path mapping
 │   └── theme.ts            # Legacy re-exports (deprecated)
 ├── lib/
 │   ├── auth.ts             # Auth.js config (Google, email restriction)
 │   ├── edge-config.ts      # getActivePaletteId() helper
-│   ├── palette-context.tsx  # ThemeProvider + usePalette() hook
+│   ├── palette-context.tsx  # ThemeProvider + usePalette() hook + client-side switching
 │   ├── three/
 │   │   ├── river-shader.ts  # GLSL vertex/fragment shaders, parameterized colors
 │   │   ├── particle-system.ts
 │   │   ├── ambient-stream.ts
 │   │   └── scene-manager.ts
 │   ├── hooks/
-│   │   ├── useQuestStore.ts  # Zustand store (phase, reveals, scroll)
-│   │   ├── useDeviceType.ts  # Responsive particle counts + pixel ratios
+│   │   ├── useQuestStore.ts    # Zustand store (phase, reveals, scroll, sections visited, download)
+│   │   ├── useKonami.ts        # Konami code keydown listener
+│   │   ├── useDeviceType.ts    # Responsive particle counts + pixel ratios
 │   │   ├── useReducedMotion.ts
 │   │   └── useScrollProgress.ts
 │   ├── animations/
@@ -78,18 +89,23 @@ src/
 
 ## Palette System
 
-8 color palettes (4 Portuguese heritage, 4 tech aesthetics) controlled from `/admin`. Each palette defines 8 semantic roles:
+8 color palettes (4 Portuguese heritage, 4 tech aesthetics) with two control layers:
+
+- **Admin control:** `/admin` panel updates Vercel Edge Config (sets the server-rendered default)
+- **Visitor control:** Header palette switcher persists selection to `localStorage` and applies instantly
+
+Each palette defines 8 semantic color roles:
 
 | Role | Usage |
 |------|-------|
 | `background` | Page background, section backgrounds |
 | `backgroundLight` | Glass cards, hover states, SVG fills |
 | `accent` | Headings, links, borders, progress bar |
-| `cta` | Buttons, project names, sign-off text |
+| `cta` | Buttons, project names, download CTA |
 | `foreground` | Body text, heading text |
-| `stream1` | Data stream particles, terminal text |
-| `stream2` | Sales stream particles, equation colors |
-| `stream3` | Poker stream particles, terminal dots |
+| `stream1` | Data stream particles, language skill pills |
+| `stream2` | Sales stream particles, cloud skill pills |
+| `stream3` | Poker stream particles, data skill pills |
 
 **How it works:**
 
@@ -97,9 +113,21 @@ src/
 2. CSS custom properties (`--background`, `--accent`, etc.) are injected on `<html style="...">`
 3. Tailwind `@theme inline` maps these to utility classes (`bg-background`, `text-accent/60`)
 4. Client components access hex values and Three.js integers via `usePalette()` context
-5. No flash of wrong theme — colors are in the initial HTML response
+5. On mount, `ThemeProvider` checks `localStorage` for a visitor override and applies it
+6. Palette switches update CSS variables, React context, and `localStorage` simultaneously
+7. No flash of wrong theme — server-rendered colors load first, visitor override applies on hydration
 
 **Available palettes:** Porto Data Streams, Azulejo Algorithms, Nazare Wavefronts, Pastel de Nata, Autumn AI, Forest Floor, Mediterranean Code, Oceanic Insights.
+
+## One-Sheeter System
+
+8 palette-matched PDF one-sheeters are served from `/public/onesheets/`. The download button automatically selects the correct PDF based on the active palette. Mapping is defined in `src/config/onesheet-map.ts`.
+
+## Easter Eggs
+
+- **Konami Code** (up up down down left right left right B A): Triggers a fullscreen "CHEAT CODE ACTIVATED" overlay with particle burst and rainbow scrollbar for 5 seconds.
+- **Signature Animation:** Footer signature image reveals left-to-right with a `clip-path` animation on scroll into view. Falls back to static on `prefers-reduced-motion`.
+- **Cursor Trail:** Desktop-only accent-colored dot trail following the cursor using `requestAnimationFrame`. Hidden on touch devices and reduced motion.
 
 ## Three.js Scenes
 
@@ -121,12 +149,12 @@ npm run dev
 
 | Variable | Source | Purpose |
 |----------|--------|---------|
-| `GOOGLE_CLIENT_ID` | GCP Console → Credentials | OAuth sign-in |
-| `GOOGLE_CLIENT_SECRET` | GCP Console → Credentials | OAuth sign-in |
+| `GOOGLE_CLIENT_ID` | GCP Console | OAuth sign-in (admin) |
+| `GOOGLE_CLIENT_SECRET` | GCP Console | OAuth sign-in (admin) |
 | `AUTH_SECRET` | `openssl rand -base64 32` | Auth.js session encryption |
-| `EDGE_CONFIG` | Vercel Dashboard → Storage | Edge Config connection string |
-| `EDGE_CONFIG_ID` | Vercel Dashboard → Storage | Edge Config store ID |
-| `VERCEL_API_TOKEN` | Vercel Dashboard → Account → Tokens | Writing to Edge Config |
+| `EDGE_CONFIG` | Vercel Dashboard | Edge Config connection string |
+| `EDGE_CONFIG_ID` | Vercel Dashboard | Edge Config store ID |
+| `VERCEL_API_TOKEN` | Vercel Dashboard | Writing to Edge Config |
 
 ## Deployment
 
@@ -134,13 +162,12 @@ Hosted on Vercel. Pushes to `main` auto-deploy. All environment variables must b
 
 ## Roadmap
 
-- **Analytics integration** — Track which palette visitors see and section engagement
+- **Preview thumbnails** — Generate PNG previews of each palette's one-sheeter for the download section
 - **Additional palettes** — Seasonal or event-specific themes
 - **CMS for content** — Move copy from `content.ts` to a headless CMS for non-dev editing
 - **Blog / writing section** — Long-form content on data engineering, sales, and poker strategy
 - **Case studies** — Deep-dive pages for OptiMeasure, CacheBash, and AI Portal with live demos
 - **Contact form** — Inline form with serverless function, replacing mailto link
 - **Performance monitoring** — Web Vitals dashboard, Three.js frame rate tracking
-- **A/B testing** — Test different hero hooks and CTA copy against conversion goals
 - **Mobile gestures** — Swipe navigation between sections, haptic feedback on reveals
 - **Sound design** — Optional ambient audio tied to scroll position and palette

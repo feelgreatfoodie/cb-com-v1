@@ -51,6 +51,49 @@ export const journey = {
   ],
 } as const;
 
+export const competencies = {
+  title: 'CORE COMPETENCIES',
+  hub: [
+    { id: 'data-arch', label: 'DATA Architecture', icon: 'database' },
+    { id: 'ai-hi', label: 'AI+HI Solutions', icon: 'brain' },
+    { id: 'exec-rel', label: 'EXECUTIVE Relationships', icon: 'handshake' },
+    { id: 'rapid-proto', label: 'RAPID Prototyping', icon: 'rocket' },
+    { id: 'team-build', label: 'TEAM Building', icon: 'users' },
+    { id: 'biz-strategy', label: 'BUSINESS Strategy', icon: 'chart' },
+  ],
+} as const;
+
+export const openTo = {
+  title: 'OPEN TO',
+  subtitle: 'Roles where I deliver the most impact.',
+  roles: [
+    {
+      title: 'Solutions Architect',
+      description:
+        'Designing end-to-end technical solutions that bridge business needs and engineering reality.',
+      brings: ['System Design', 'Client-Facing', 'GCP/Cloud'],
+    },
+    {
+      title: 'AI/ML Solutions Engineer',
+      description:
+        'Building and deploying AI-powered products that solve real problems, not science projects.',
+      brings: ['Python/ML', 'Rapid Prototyping', 'Production AI'],
+    },
+    {
+      title: 'Technical Account Manager',
+      description:
+        'The bridge between product teams and enterprise clients — technical depth with relationship trust.',
+      brings: ['Enterprise Sales', 'Data Engineering', 'Stakeholder Mgmt'],
+    },
+    {
+      title: 'AI Strategist',
+      description:
+        'Guiding organizations from AI experimentation to operational integration.',
+      brings: ['AI Roadmaps', 'Change Mgmt', 'Executive Comms'],
+    },
+  ],
+} as const;
+
 export const workshop = {
   title: 'CURRENTLY BUILDING',
   tagline: 'POCs in days, not quarters.',
@@ -106,20 +149,95 @@ export const bossfight = {
       'I build people who build systems.',
     ],
   },
-  testimonial: {
-    quote:
-      'Christian brings both technical excellence and great team spirit... a natural leader who motivates his team to accomplish their goals.',
-    author: 'Brianna Mersey',
-    role: 'VP Data',
-  },
+  testimonials: [
+    {
+      quote:
+        'A highly skilled senior data engineer with strong expertise in pipelining complex data sources, GCP, BQML and the broader Google ecosystem. He consistently delivered scalable, efficient solutions while making collaboration easy and enjoyable. Christian brings both technical excellence and great team spirit!',
+      author: 'Brianna Mersey',
+      role: 'VP Data',
+    },
+    {
+      quote:
+        'A naturally curious and technically adept person. He has the capacity to not only complete assigned work but to go more in-depth on topics. Christian is a natural leader who motivates his team to accomplish their goals and have fun doing it. He is an exceptional individual who functions well in both the technical and people realms.',
+      author: 'Craig Quincy',
+      role: 'Engineering Leader',
+    },
+    {
+      quote:
+        'Christian has been terrific to work with. I value his energy for learning, teaching others, and creating an environment where everyone has fun. His thoroughness and attention to detail were key to making a great product. I\'d love to be on a team with him in the future!',
+      author: 'Eric Budd',
+      role: 'Engineering Data Director',
+    },
+    {
+      quote:
+        'One of the smartest, hardest working, inspiring, and motivating team leaders I\'ve ever hired. He\'s very well organized and methodical in his approach, and understands how to build a streamlined, effective, and highly productive business. Christian would be an asset to any team!',
+      author: 'Malek Bishawi',
+      role: 'Global Sales & Business Development',
+    },
+    {
+      quote:
+        'Christian has a stellar personality that draws people in — colleagues enjoy his presence, and clients delight in his genuine, warm temperament. His outstanding commitment to clientele and incredible work ethic are evident at all times.',
+      author: 'Sumer Anelli',
+      role: 'Convention Services Manager',
+    },
+    {
+      quote:
+        'He is a born leader, a man of true integrity and loyalty, and he brings out the best in those around him. Attributes which make him a valuable friend and allow him to excel in business.',
+      author: 'Matthew Walvick',
+      role: 'Healthcare Technology Physician',
+    },
+  ],
+} as const;
+
+export const implementation = {
+  title: 'IMPLEMENTATION',
+  subtitle: 'The tools I ship with.',
+  skills: [
+    { name: 'Python', category: 'language' },
+    { name: 'TypeScript', category: 'language' },
+    { name: 'SQL', category: 'language' },
+    { name: 'JavaScript', category: 'language' },
+    { name: 'GCP', category: 'cloud' },
+    { name: 'BigQuery', category: 'cloud' },
+    { name: 'Cloud Functions', category: 'cloud' },
+    { name: 'Vertex AI', category: 'cloud' },
+    { name: 'dbt', category: 'data' },
+    { name: 'Airflow', category: 'data' },
+    { name: 'Dataform', category: 'data' },
+    { name: 'Looker', category: 'data' },
+    { name: 'LangChain', category: 'ai' },
+    { name: 'Claude API', category: 'ai' },
+    { name: 'scikit-learn', category: 'ai' },
+    { name: 'TensorFlow', category: 'ai' },
+  ],
+  certifications: [
+    { name: 'GCP Professional Data Engineer', badge: '/gcp-pde.png' },
+    { name: 'GCP Professional Cloud Architect', badge: '/gcp-pca.png' },
+  ],
+} as const;
+
+export const oneSheeter = {
+  title: 'GRAB THE ONE-SHEETER',
+  subtitle: 'Print-ready. Take me with you.',
+  ctaLabel: 'Download PDF',
 } as const;
 
 export const footer = {
-  signoff: 'Strength and Honour.',
+  signoff: '',
   links: {
     email: 'christianbourlier@gmail.com',
     phone: '(310) 963-5282',
     linkedin: 'https://linkedin.com/in/christianbourlier',
     website: 'christianbourlier.com',
   },
+  sections: [
+    { label: 'Hero', anchor: '#hero' },
+    { label: 'Journey', anchor: '#journey' },
+    { label: 'Competencies', anchor: '#competencies' },
+    { label: 'Open To', anchor: '#opento' },
+    { label: 'Workshop', anchor: '#workshop' },
+    { label: 'Boss Fight', anchor: '#bossfight' },
+    { label: 'Skills', anchor: '#implementation' },
+    { label: 'One-Sheeter', anchor: '#onesheeter' },
+  ],
 } as const;

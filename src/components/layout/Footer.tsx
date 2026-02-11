@@ -1,12 +1,61 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { footer } from '@/config/content';
+import { onesheetMap } from '@/config/onesheet-map';
+import { usePalette } from '@/lib/palette-context';
+import { useReducedMotion } from '@/lib/hooks/useReducedMotion';
 import { fadeInUp, staggerContainer } from '@/lib/animations/scroll-variants';
 
-export function Footer() {
+function SignatureReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true });
+  const prefersReduced = useReducedMotion();
+
   return (
-    <footer className="relative border-t border-accent/10 bg-background py-16">
+    <div ref={ref} className="relative mx-auto mb-8 h-[21rem] w-[78rem] max-w-full">
+      <img
+        src="/signature-white.png"
+        alt="Christian Bourlier signature"
+        className="h-full w-full object-contain"
+        style={
+          prefersReduced || !isInView
+            ? {}
+            : {
+                clipPath: 'inset(0 0 0 0)',
+                animation: 'signatureReveal 1.5s ease-out forwards',
+              }
+        }
+        onError={(e) => {
+          (e.target as HTMLImageElement).style.display = 'none';
+        }}
+      />
+      <style>{`
+        @keyframes signatureReveal {
+          from { clip-path: inset(0 100% 0 0); }
+          to   { clip-path: inset(0 0 0 0); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+export function Footer() {
+  const { paletteId } = usePalette();
+  const pdfUrl = onesheetMap[paletteId] ?? onesheetMap['porto-data-streams'];
+
+  return (
+    <footer className="relative bg-background py-16">
+      {/* Gradient separator */}
+      <div
+        className="absolute left-0 right-0 top-0 h-px"
+        style={{
+          background:
+            'linear-gradient(to right, transparent, var(--accent), transparent)',
+        }}
+      />
+
       <motion.div
         className="mx-auto max-w-4xl px-6 text-center"
         variants={staggerContainer}
@@ -14,13 +63,31 @@ export function Footer() {
         whileInView="visible"
         viewport={{ once: true }}
       >
-        <motion.p
+        {/* Section nav */}
+        <motion.nav
           variants={fadeInUp}
-          className="mb-8 font-mono text-2xl font-bold italic tracking-wide text-cta"
+          className="mb-10 flex flex-wrap items-center justify-center gap-4"
+          aria-label="Footer navigation"
         >
-          {footer.signoff}
-        </motion.p>
+          {footer.sections.map((section, i) => (
+            <span key={section.anchor} className="flex items-center gap-4">
+              <a
+                href={section.anchor}
+                className="font-mono text-xs tracking-wider text-foreground/40 transition-colors hover:text-accent"
+              >
+                {section.label}
+              </a>
+              {i < footer.sections.length - 1 && (
+                <span className="text-foreground/10">·</span>
+              )}
+            </span>
+          ))}
+        </motion.nav>
 
+        {/* Signature animation */}
+        <SignatureReveal />
+
+        {/* Contact links */}
         <motion.div
           variants={fadeInUp}
           className="mb-8 flex flex-wrap items-center justify-center gap-6"
@@ -56,6 +123,17 @@ export function Footer() {
             <span className="inline-block transition-shadow duration-300 group-hover:bloom-text">
               LinkedIn
             </span>
+          </a>
+        </motion.div>
+
+        {/* Download CTA */}
+        <motion.div variants={fadeInUp} className="mb-8">
+          <a
+            href={pdfUrl}
+            download
+            className="inline-flex items-center gap-2 rounded-lg border border-accent/30 bg-transparent px-5 py-2 font-mono text-xs tracking-wider text-accent transition-all duration-300 hover:border-accent/60 hover:bg-accent/10"
+          >
+            Download One-Sheeter
           </a>
         </motion.div>
 

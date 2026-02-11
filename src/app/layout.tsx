@@ -77,7 +77,7 @@ export default async function RootLayout({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
       >
-        <ThemeProvider colors={palette.colors}>{children}</ThemeProvider>
+        <ThemeProvider paletteId={paletteId} colors={palette.colors}>{children}</ThemeProvider>
       </body>
     </html>
   );
