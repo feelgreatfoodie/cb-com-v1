@@ -182,17 +182,17 @@ export const workshop = {
   ],
   videos: [
     {
-      title: 'Motivational Selling',
+      title: '"Let\'s Go!" Capstone Presentation',
       description:
-        'Galvanize Web Dev Immersive, Boulder — a talk on sales and finding your product to share with the world.',
+        'A mobile app for spontaneous social planning — events within 72 hours, because beyond that window people are non-committal.',
       videoId: 'DLkih2xIRQQ',
       start: 743,
       end: 1234,
     },
     {
-      title: '"Let\'s Go!" Capstone Presentation',
+      title: 'Motivational Selling',
       description:
-        'A mobile app for spontaneous social planning — events within 72 hours, because beyond that window people are non-committal.',
+        'Galvanize Web Dev Immersive, Boulder — a talk on sales and finding your product to share with the world.',
       videoId: 'VcEotv_bc8g',
     },
   ],

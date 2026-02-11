@@ -47,7 +47,7 @@ export const useQuestStore = create<QuestState>((set) => ({
   setScrollProgress: (scrollProgress) => set({ scrollProgress }),
   revealStream: (stream) =>
     set((state) => ({
-      revealedStreams: { ...state.revealedStreams, [stream]: true },
+      revealedStreams: { ...state.revealedStreams, [stream]: !state.revealedStreams[stream] },
     })),
   revealEquation: () => set({ equationRevealed: true }),
   startQuest: () => set({ questStarted: true }),
