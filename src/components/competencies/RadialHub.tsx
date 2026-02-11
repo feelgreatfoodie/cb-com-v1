@@ -38,6 +38,8 @@ const satelliteColors = [
 export function RadialHub({ items }: { items: readonly Competency[] }) {
   const { colors } = usePalette();
   const prefersReduced = useReducedMotion();
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(wrapperRef, { once: true });
 
   const cx = 200;
   const cy = 200;
@@ -89,9 +91,6 @@ export function RadialHub({ items }: { items: readonly Competency[] }) {
       </svg>
     );
   }
-
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(wrapperRef, { once: true });
 
   return (
     <div ref={wrapperRef}>

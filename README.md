@@ -1,6 +1,6 @@
 # Ribeira Quest
 
-Gamified personal branding site for Christian Bourlier — Technical Solutions Partner. A scroll-driven single-page experience with Three.js scenes, animated reveals, palette-matched one-sheeter downloads, and a visitor-facing palette switcher.
+Gamified personal branding site for Christian Bourlier — Solutions Architect & Data Engineer. A scroll-driven single-page experience with Three.js scenes, animated reveals, palette-matched one-sheeter downloads, a visitor-facing palette switcher, and SEO optimized for recruiter discoverability.
 
 **Live:** [christianbourlier.com](https://christianbourlier.com)
 
@@ -24,7 +24,8 @@ The site doubles as a technical showcase: shader-based river animation, GPU part
 | **Implementation** | `ImplementationSection` + `SkillPill` + `CertBadge` | 16 category-colored skill pills (language/cloud/data/ai) and GCP certification badges (PDE, PCA). |
 | **One-Sheeter** | `OneSheeterSection` + `PDFPreview` | Palette-matched PDF download with thumbnail preview. Serves the correct one-sheeter for the active palette from `/public/onesheets/`, with PNG previews in `/public/onesheet-previews/`. |
 | **Contact** | `ContactSection` | Glass-card contact form (Name, Email, Phone, LinkedIn, Company, Message). Submissions POST to `/api/contact` and append to a Google Sheet via service account. |
-| **Footer** | `Footer` | Signature animation reveal, section nav, contact links, download CTA, and hidden admin gear icon. |
+| **Writing** | `WritingSection` | Latest Medium blog posts fetched at build time, displayed as glass cards with publication dates. |
+| **Footer** | `Footer` | Signature animation reveal (10% larger on mobile), section nav (sans redundant Contact/One-Sheeter), contact links (stacked on mobile, inline on desktop), download CTA, and hidden admin gear icon. |
 
 ## Tech Stack
 
@@ -41,9 +42,15 @@ The site doubles as a technical showcase: shader-based river animation, GPU part
 ```
 src/
 ├── app/
-│   ├── layout.tsx          # Async — reads palette from Edge Config, injects CSS vars on <html>
+│   ├── layout.tsx          # Async — reads palette from Edge Config, injects CSS vars, SEO metadata + JSON-LD
 │   ├── page.tsx            # Main page composing all sections + easter eggs
 │   ├── globals.css         # @theme inline registrations, glassmorphism, scrollbar
+│   ├── manifest.ts         # PWA web manifest (generates /manifest.webmanifest)
+│   ├── robots.ts           # robots.txt generation
+│   ├── sitemap.ts          # sitemap.xml generation
+│   ├── not-found.tsx       # Custom 404 page
+│   ├── opengraph-image.tsx # Dynamic OG image (edge runtime, 1200×630)
+│   ├── twitter-image.tsx   # Dynamic Twitter/LinkedIn card image (edge runtime, 1200×630)
 │   ├── admin/
 │   │   ├── page.tsx        # Auth-gated server component
 │   │   └── PaletteGrid.tsx # 8 palette cards with preview + apply
@@ -126,6 +133,17 @@ Each palette defines 8 semantic color roles:
 
 8 palette-matched PDF one-sheeters are served from `/public/onesheets/`, each with a PNG thumbnail preview in `/public/onesheet-previews/`. The download section displays a 3D-tilted preview image above the CTA button, with a glow effect underneath. The download button automatically selects the correct PDF based on the active palette. Both PDF and preview mappings are defined in `src/config/onesheet-map.ts`.
 
+## SEO & Discoverability
+
+Optimized for recruiter and hiring-manager searches targeting Solutions Architect, Data Engineer, AI/ML Engineer, and Technical Account Manager roles.
+
+- **Metadata:** Title and description front-load all target job titles within Google's 160-char snippet length. 18 keywords covering role titles, GCP certifications, and key technologies.
+- **Canonical URL:** `alternates.canonical` prevents duplicate-content signals.
+- **JSON-LD:** `@graph` with Person and WebSite schemas. Person includes `jobTitle` array (5 roles), `hasCredential` (GCP PDE + PCA certs), `hasOccupation` (Solutions Architect, Data Engineer with US location + skills), and 19 `knowsAbout` terms. Cross-referenced via `@id` anchors.
+- **Social cards:** OpenGraph (`siteName`, `locale`, explicit `images` with dimensions) and Twitter `summary_large_image` card. Dynamic image generation via edge runtime (both `opengraph-image.tsx` and `twitter-image.tsx`).
+- **PWA manifest:** `manifest.ts` generates `/manifest.webmanifest` with SEO-optimized name, palette-matched colors, and favicon.
+- **Heading hierarchy:** Clean H1 → H2 → H2 chain with no gaps (CompetencyHubSection fixed from `<p>` to `<h2>`).
+
 ## Easter Eggs
 
 - **Konami Code** (up up down down left right left right B A): Triggers a fullscreen "CHEAT CODE ACTIVATED" overlay with particle burst and rainbow scrollbar for 5 seconds.
@@ -176,7 +194,10 @@ All sections are fully responsive with a mobile-first approach using Tailwind br
 - **Header:** Touch-friendly icon targets (`h-10 w-10` on mobile, auto on desktop). Palette switcher dropdown uses `w-[calc(100vw-2rem)]` to fit mobile screens.
 - **Cert badges:** Scale from `h-24 w-24` to `sm:h-32 sm:w-32`.
 - **Section heights:** `min-h-[70vh] sm:min-h-screen` prevents excessive scrolling on mobile.
-- **Radial hub:** SVG `viewBox` scales naturally across all screen sizes with no fallback grid needed.
+- **Radial hub:** SVG `viewBox` scales naturally across all screen sizes. Uses `useInView` on a wrapper `<div>` (not `whileInView` on SVG children) for reliable IntersectionObserver on mobile browsers.
+- **PDF preview:** Uses `useInView` ref for reliable viewport detection on mobile (same pattern as RadialHub).
+- **Testimonial carousel:** Touch swipe left/right (50px threshold) navigates between testimonials. Auto-advance pauses on hover.
+- **Footer:** Contact links use `text-xs` on mobile for clean two-line wrapping, `text-sm` inline with pipes on desktop. Signature is 10% larger on mobile (`h-[6.6rem]` / `max-w-[22rem]`) vs original `h-24` / `max-w-xs`.
 
 ## Roadmap
 
@@ -186,5 +207,6 @@ All sections are fully responsive with a mobile-first approach using Tailwind br
 - **Case studies** — Deep-dive pages for OptiMeasure, CacheBash, and AI Portal with live demos
 - ~~**Contact form** — Inline form with serverless function, replacing mailto link~~ (shipped)
 - **Performance monitoring** — Web Vitals dashboard, Three.js frame rate tracking
-- **Mobile gestures** — Swipe navigation between sections, haptic feedback on reveals
+- ~~**Mobile gestures** — Swipe navigation between sections, haptic feedback on reveals~~ (testimonial swipe shipped)
+- **Haptic feedback** — Vibration on card reveals and section transitions (mobile)
 - **Sound design** — Optional ambient audio tied to scroll position and palette
