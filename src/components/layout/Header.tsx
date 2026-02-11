@@ -110,6 +110,7 @@ const navLinks = footer.sections.filter(
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 50);
@@ -117,6 +118,28 @@ export function Header() {
     handler();
     return () => window.removeEventListener('scroll', handler);
   }, []);
+
+  // Body scroll lock when mobile menu is open
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [menuOpen]);
+
+  // Close on Escape key
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false);
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [menuOpen]);
 
   return (
     <header
@@ -185,9 +208,64 @@ export function Header() {
           ))}
         </nav>
 
-        {/* Right: palette switcher */}
-        <PaletteSwitcher />
+        {/* Right: palette switcher + hamburger */}
+        <div className="flex items-center gap-2">
+          <PaletteSwitcher />
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="relative flex h-10 w-10 items-center justify-center rounded-lg transition-colors hover:bg-accent/10 md:hidden"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+          >
+            <div className="flex w-5 flex-col items-center gap-[5px]">
+              <span
+                className={`block h-[1.5px] w-5 bg-foreground/60 transition-all duration-300 ${
+                  menuOpen ? 'translate-y-[6.5px] rotate-45' : ''
+                }`}
+              />
+              <span
+                className={`block h-[1.5px] w-5 bg-foreground/60 transition-all duration-300 ${
+                  menuOpen ? 'opacity-0' : ''
+                }`}
+              />
+              <span
+                className={`block h-[1.5px] w-5 bg-foreground/60 transition-all duration-300 ${
+                  menuOpen ? '-translate-y-[6.5px] -rotate-45' : ''
+                }`}
+              />
+            </div>
+          </button>
+        </div>
       </div>
+
+      {/* Mobile overlay */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-x-0 top-[64px] bottom-0 z-40 bg-background/95 backdrop-blur-xl md:hidden"
+          >
+            <nav className="flex flex-col items-center gap-1 px-6 pt-8" aria-label="Mobile navigation">
+              {navLinks.map((s, i) => (
+                <motion.a
+                  key={s.anchor}
+                  href={s.anchor}
+                  onClick={() => setMenuOpen(false)}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  className="w-full rounded-lg py-3 text-center font-mono text-sm tracking-[0.15em] text-foreground/60 transition-colors hover:bg-accent/10 hover:text-accent"
+                >
+                  {s.label}
+                </motion.a>
+              ))}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
