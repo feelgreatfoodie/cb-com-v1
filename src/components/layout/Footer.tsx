@@ -69,7 +69,7 @@ export function Footer() {
         {/* Hidden admin link — only visible on hover */}
         <a
           href="/admin"
-          className="mt-6 inline-block opacity-0 transition-opacity duration-500 hover:opacity-60"
+          className="mt-6 inline-block opacity-[0.08] transition-opacity duration-500 hover:opacity-60"
           aria-label="Admin"
         >
           <svg
