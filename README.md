@@ -23,6 +23,7 @@ The site doubles as a technical showcase: shader-based river animation, GPU part
 | **Boss Fight** | `BossFightSection` + `TestimonialCarousel` | Animated equation reveal, SVG architecture flow diagram, and 6-testimonial auto-advancing carousel with LinkedIn recommendations. |
 | **Implementation** | `ImplementationSection` + `SkillPill` + `CertBadge` | 16 category-colored skill pills (language/cloud/data/ai) and GCP certification badges (PDE, PCA). |
 | **One-Sheeter** | `OneSheeterSection` + `PDFPreview` | Palette-matched PDF download with thumbnail preview. Serves the correct one-sheeter for the active palette from `/public/onesheets/`, with PNG previews in `/public/onesheet-previews/`. |
+| **Contact** | `ContactSection` | Glass-card contact form (Name, Email, Phone, LinkedIn, Company, Message). Submissions POST to `/api/contact` and append to a Google Sheet via service account. |
 | **Footer** | `Footer` | Signature animation reveal, section nav, contact links, download CTA, and hidden admin gear icon. |
 
 ## Tech Stack
@@ -48,6 +49,7 @@ src/
 │   │   └── PaletteGrid.tsx # 8 palette cards with preview + apply
 │   └── api/
 │       ├── auth/[...nextauth]/route.ts  # Google OAuth handler
+│       ├── contact/route.ts             # POST form submissions → Google Sheets
 │       └── palette/route.ts             # POST to update Edge Config
 ├── components/
 │   ├── hero/               # HeroSection, RiverScene (Three.js shader river)
@@ -58,11 +60,12 @@ src/
 │   ├── bossfight/          # BossFightSection, EquationVisual, ArchitectureMap, TestimonialCarousel
 │   ├── implementation/     # ImplementationSection, SkillPill, CertBadge
 │   ├── download/           # OneSheeterSection, PDFPreview
+│   ├── contact/            # ContactSection (form → Google Sheets)
 │   ├── layout/             # Header, Footer, ScrollProgress
 │   └── ui/                 # Button, GlowText, KonamiOverlay, CursorTrail
 ├── config/
 │   ├── palettes.ts         # 8 palette definitions + types
-│   ├── content.ts          # All copy/text content (hero, journey, competencies, openTo, workshop, bossfight, implementation, oneSheeter, footer)
+│   ├── content.ts          # All copy/text content (hero, journey, competencies, openTo, workshop, bossfight, implementation, oneSheeter, contact, footer)
 │   ├── onesheet-map.ts     # Palette ID → PDF path + preview path mapping
 │   └── theme.ts            # Legacy re-exports (deprecated)
 ├── lib/
@@ -155,6 +158,9 @@ npm run dev
 | `EDGE_CONFIG` | Vercel Dashboard | Edge Config connection string |
 | `EDGE_CONFIG_ID` | Vercel Dashboard | Edge Config store ID |
 | `VERCEL_API_TOKEN` | Vercel Dashboard | Writing to Edge Config |
+| `GOOGLE_SHEETS_CLIENT_EMAIL` | GCP Console | Service account email for Sheets API |
+| `GOOGLE_SHEETS_PRIVATE_KEY` | GCP Console | Service account private key (escaped newlines) |
+| `GOOGLE_SHEETS_SPREADSHEET_ID` | Google Sheets URL | Spreadsheet ID for contact form submissions |
 
 ## Deployment
 
@@ -178,7 +184,7 @@ All sections are fully responsive with a mobile-first approach using Tailwind br
 - **CMS for content** — Move copy from `content.ts` to a headless CMS for non-dev editing
 - **Blog / writing section** — Long-form content on data engineering, sales, and poker strategy
 - **Case studies** — Deep-dive pages for OptiMeasure, CacheBash, and AI Portal with live demos
-- **Contact form** — Inline form with serverless function, replacing mailto link
+- ~~**Contact form** — Inline form with serverless function, replacing mailto link~~ (shipped)
 - **Performance monitoring** — Web Vitals dashboard, Three.js frame rate tracking
 - **Mobile gestures** — Swipe navigation between sections, haptic feedback on reveals
 - **Sound design** — Optional ambient audio tied to scroll position and palette
