@@ -10,10 +10,8 @@ import {
 } from 'react';
 import {
   type PaletteColors,
-  type Palette,
   hexToInt,
   getPalette,
-  palettes,
 } from '@/config/palettes';
 
 const STORAGE_KEY = 'cb-palette-id';
@@ -54,27 +52,31 @@ export function ThemeProvider({
   colors: PaletteColors;
   children: ReactNode;
 }) {
-  const [paletteId, setPaletteId] = useState(serverPaletteId);
-  const [colors, setColors] = useState(serverColors);
-  const [int, setInt] = useState(() => computeInts(serverColors));
-
-  // On mount, check localStorage for a visitor override
-  useEffect(() => {
+  const [paletteId, setPaletteId] = useState(() => {
+    if (typeof window === 'undefined') return serverPaletteId;
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored && stored !== serverPaletteId) {
+      if (stored) {
         const palette = getPalette(stored);
-        if (palette.id === stored) {
-          setPaletteId(stored);
-          setColors(palette.colors);
-          setInt(computeInts(palette.colors));
-          applyColorsToDOM(palette.colors);
-        }
+        if (palette.id === stored) return stored;
       }
-    } catch {
-      // localStorage unavailable
+    } catch { /* localStorage unavailable */ }
+    return serverPaletteId;
+  });
+
+  const initialColors = paletteId !== serverPaletteId
+    ? getPalette(paletteId).colors
+    : serverColors;
+
+  const [colors, setColors] = useState(initialColors);
+  const [int, setInt] = useState(() => computeInts(initialColors));
+
+  // Apply localStorage override to DOM on mount
+  useEffect(() => {
+    if (paletteId !== serverPaletteId) {
+      applyColorsToDOM(colors);
     }
-  }, [serverPaletteId]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const switchPalette = useCallback((id: string) => {
     const palette = getPalette(id);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import { useReducedMotion } from '@/lib/hooks/useReducedMotion';
 
 const DOT_COUNT = 6;
@@ -14,30 +14,7 @@ interface Dot {
 
 export function CursorTrail() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const dotsRef = useRef<Dot[]>([]);
-  const mouseRef = useRef({ x: 0, y: 0 });
-  const rafRef = useRef<number>(0);
   const prefersReduced = useReducedMotion();
-
-  const animate = useCallback(() => {
-    const dots = dotsRef.current;
-    let { x, y } = mouseRef.current;
-
-    for (let i = 0; i < dots.length; i++) {
-      const dot = dots[i];
-      if (i === 0) {
-        dot.x += (x - dot.x) * SPRING;
-        dot.y += (y - dot.y) * SPRING;
-      } else {
-        const prev = dots[i - 1];
-        dot.x += (prev.x - dot.x) * SPRING;
-        dot.y += (prev.y - dot.y) * SPRING;
-      }
-      dot.el.style.transform = `translate(${dot.x}px, ${dot.y}px)`;
-    }
-
-    rafRef.current = requestAnimationFrame(animate);
-  }, []);
 
   useEffect(() => {
     if (prefersReduced) return;
@@ -48,6 +25,9 @@ export function CursorTrail() {
 
     const container = containerRef.current;
     if (!container) return;
+
+    const mouse = { x: 0, y: 0 };
+    let rafId = 0;
 
     // Create dots
     const dots: Dot[] = [];
@@ -70,21 +50,40 @@ export function CursorTrail() {
       container.appendChild(el);
       dots.push({ x: -100, y: -100, el });
     }
-    dotsRef.current = dots;
+
+    function animate() {
+      const { x, y } = mouse;
+
+      for (let i = 0; i < dots.length; i++) {
+        const dot = dots[i];
+        if (i === 0) {
+          dot.x += (x - dot.x) * SPRING;
+          dot.y += (y - dot.y) * SPRING;
+        } else {
+          const prev = dots[i - 1];
+          dot.x += (prev.x - dot.x) * SPRING;
+          dot.y += (prev.y - dot.y) * SPRING;
+        }
+        dot.el.style.transform = `translate(${dot.x}px, ${dot.y}px)`;
+      }
+
+      rafId = requestAnimationFrame(animate);
+    }
 
     const handleMouseMove = (e: MouseEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-    rafRef.current = requestAnimationFrame(animate);
+    rafId = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      cancelAnimationFrame(rafRef.current);
+      cancelAnimationFrame(rafId);
       dots.forEach((d) => d.el.remove());
     };
-  }, [prefersReduced, animate]);
+  }, [prefersReduced]);
 
   if (prefersReduced) return null;
 

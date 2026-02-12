@@ -27,9 +27,14 @@ export const useReducedMotionStore = create<ReducedMotionStore>((set) => ({
  * Returns true if reduced motion should be active.
  * Priority: manual override > OS preference.
  */
+function getOsPreference() {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 export function useReducedMotion(): boolean {
   const override = useReducedMotionStore((s) => s.override);
-  const [osPrefers, setOsPrefers] = useState(false);
+  const [osPrefers, setOsPrefers] = useState(getOsPreference);
 
   // Hydrate from localStorage on mount
   useEffect(() => {
@@ -41,7 +46,6 @@ export function useReducedMotion(): boolean {
 
   useEffect(() => {
     const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setOsPrefers(mql.matches);
 
     const handler = (e: MediaQueryListEvent) => setOsPrefers(e.matches);
     mql.addEventListener('change', handler);

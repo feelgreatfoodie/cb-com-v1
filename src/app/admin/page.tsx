@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import { getActivePaletteId } from '@/lib/edge-config';
@@ -23,12 +24,12 @@ export default async function AdminPage() {
               {session.user.email}
             </p>
           </div>
-          <a
+          <Link
             href="/api/auth/signout"
             className="rounded-lg border border-accent/30 px-4 py-2 font-mono text-sm text-accent transition-colors hover:bg-accent/10"
           >
             Sign Out
-          </a>
+          </Link>
         </div>
         <PaletteGrid palettes={palettes} activePaletteId={activePaletteId} />
       </div>
