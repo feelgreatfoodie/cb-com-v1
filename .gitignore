@@ -26,6 +26,9 @@
 # misc
 .DS_Store
 *.pem
+public/Screenshot*
+public/*.pdf
+public/SKILLS_LIST.md
 
 # debug
 npm-debug.log*

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import { trackEvent } from '@/lib/analytics';
 
 interface ProjectCardProps {
   name: string;
@@ -28,7 +29,11 @@ export function ProjectCard({
   return (
     <motion.div
       className="glass group flex h-full flex-col rounded-xl p-4 transition-all duration-300 hover:shadow-[0_0_40px_color-mix(in_srgb,var(--accent)_15%,transparent)] hover:border-accent/40 sm:p-6 cursor-pointer"
-      onClick={() => setShowImage(!showImage)}
+      onClick={() => {
+        const next = !showImage;
+        setShowImage(next);
+        trackEvent('project_card_toggle', { project: name, action: next ? 'expand' : 'collapse' });
+      }}
     >
       <AnimatePresence>
         {image && showImage && (
@@ -47,6 +52,7 @@ export function ProjectCard({
                 height={400}
                 className="h-full w-full rounded object-contain"
                 sizes="(max-width: 768px) 100vw, 33vw"
+                loading="lazy"
               />
             </div>
           </motion.div>
@@ -94,7 +100,10 @@ export function ProjectCard({
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            trackEvent('project_cta_click', { project: name, url: url! });
+          }}
           className="mt-4 block text-center font-mono text-[10px] tracking-wider text-cta transition-colors hover:text-accent"
         >
           [ EXPERIENCE IT LIVE &rarr; ]
