@@ -3,8 +3,8 @@
 import { useRef } from 'react';
 import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
-import { footer } from '@/config/content';
-import { onesheetMap } from '@/config/onesheet-map';
+import { footer, decodeEmail } from '@/config/content';
+import { onesheetMap } from '@/config/palettes';
 import { usePalette } from '@/lib/palette-context';
 import { useReducedMotion } from '@/lib/hooks/useReducedMotion';
 import { fadeInUp, staggerContainer } from '@/lib/animations/scroll-variants';
@@ -101,8 +101,7 @@ export function Footer() {
             href="#contact"
             onClick={(e) => {
               e.preventDefault();
-              const decoded = atob(footer.links.emailEncoded);
-              window.location.href = `mailto:${decoded}`;
+              window.location.href = `mailto:${decodeEmail()}`;
             }}
             className="group font-mono text-xs text-foreground/60 transition-all duration-300 hover:text-accent sm:text-sm"
           >

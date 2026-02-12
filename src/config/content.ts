@@ -307,6 +307,11 @@ export const contact = {
   successMessage: 'Message sent — I\'ll be in touch soon.',
 } as const;
 
+/** Decode the obfuscated email address at runtime */
+export function decodeEmail(): string {
+  return atob(footer.links.emailEncoded);
+}
+
 export const footer = {
   signoff: '',
   links: {

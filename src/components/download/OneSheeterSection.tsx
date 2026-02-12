@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { oneSheeter } from '@/config/content';
-import { onesheetMap, onesheetPreviewMap } from '@/config/onesheet-map';
+import { onesheetMap, onesheetPreviewMap } from '@/config/palettes';
 import { usePalette } from '@/lib/palette-context';
 import { useQuestStore } from '@/lib/hooks/useQuestStore';
 import { PDFPreview } from './PDFPreview';
