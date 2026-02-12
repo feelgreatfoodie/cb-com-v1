@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
 
 interface PDFPreviewProps {
@@ -43,7 +44,7 @@ function PlaceholderDoc() {
         <p className="font-mono text-xs font-semibold tracking-[0.2em] text-accent/50">
           ONE-SHEETER
         </p>
-        <p className="mt-1 font-mono text-[10px] text-foreground/20">
+        <p className="mt-1 font-mono text-[11px] text-foreground/50">
           PDF
         </p>
       </div>
@@ -71,16 +72,22 @@ export function PDFPreview({ previewSrc, alt }: PDFPreviewProps) {
         {imgFailed || !previewSrc ? (
           <PlaceholderDoc />
         ) : (
-          <>
-            {!imgLoaded && <PlaceholderDoc />}
-            <img
+          <div className="relative">
+            {!imgLoaded && (
+              <div className="absolute inset-0">
+                <PlaceholderDoc />
+              </div>
+            )}
+            <Image
               src={previewSrc}
               alt={alt}
-              className={`h-auto w-full ${imgLoaded ? '' : 'hidden'}`}
+              width={224}
+              height={290}
+              className={`h-auto w-full transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
               onLoad={() => setImgLoaded(true)}
               onError={() => setImgFailed(true)}
             />
-          </>
+          </div>
         )}
       </div>
       {/* Glow effect beneath */}

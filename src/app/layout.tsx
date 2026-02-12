@@ -1,13 +1,12 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import { getActivePaletteId } from '@/lib/edge-config';
 import { getPalette, type PaletteColors } from '@/config/palettes';
 import { ThemeProvider } from '@/lib/palette-context';
 import { WebVitals } from '@/components/layout/WebVitals';
+import { CookieConsent } from '@/components/ui/CookieConsent';
+import { ToastProvider } from '@/components/ui/Toast';
 import './globals.css';
-
-const GA_ID = 'G-N91F3VEKB4';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -107,6 +106,12 @@ export default async function RootLayout({
       style={cssVarsFromPalette(palette.colors) as React.CSSProperties}
     >
       <head>
+        <link rel="preconnect" href="https://www.youtube.com" />
+        <link rel="preconnect" href="https://i.ytimg.com" />
+        <link rel="preconnect" href="https://cdn-images-1.medium.com" />
+        <link rel="dns-prefetch" href="https://www.youtube.com" />
+        <link rel="dns-prefetch" href="https://i.ytimg.com" />
+        <link rel="dns-prefetch" href="https://cdn-images-1.medium.com" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -208,23 +213,54 @@ export default async function RootLayout({
                     '@id': 'https://christianbourlier.com/#person',
                   },
                 },
+                {
+                  '@type': 'BreadcrumbList',
+                  itemListElement: [
+                    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://christianbourlier.com' },
+                    { '@type': 'ListItem', position: 2, name: 'Journey', item: 'https://christianbourlier.com/#journey' },
+                    { '@type': 'ListItem', position: 3, name: 'Competencies', item: 'https://christianbourlier.com/#competencies' },
+                    { '@type': 'ListItem', position: 4, name: 'Open To', item: 'https://christianbourlier.com/#opento' },
+                    { '@type': 'ListItem', position: 5, name: 'Workshop', item: 'https://christianbourlier.com/#workshop' },
+                    { '@type': 'ListItem', position: 6, name: 'Writing', item: 'https://christianbourlier.com/#writing' },
+                    { '@type': 'ListItem', position: 7, name: 'Contact', item: 'https://christianbourlier.com/#contact' },
+                  ],
+                },
+                {
+                  '@type': 'Review',
+                  author: { '@type': 'Person', name: 'Brianna Mersey' },
+                  reviewBody: 'A highly skilled senior data engineer with strong expertise in pipelining complex data sources, GCP, BQML and the broader Google ecosystem. He consistently delivered scalable, efficient solutions while making collaboration easy and enjoyable.',
+                  itemReviewed: { '@id': 'https://christianbourlier.com/#person' },
+                },
+                {
+                  '@type': 'Review',
+                  author: { '@type': 'Person', name: 'Craig Quincy' },
+                  reviewBody: 'A naturally curious and technically adept person. Christian is a natural leader who motivates his team to accomplish their goals and have fun doing it. He is an exceptional individual who functions well in both the technical and people realms.',
+                  itemReviewed: { '@id': 'https://christianbourlier.com/#person' },
+                },
+                {
+                  '@type': 'Review',
+                  author: { '@type': 'Person', name: 'Eric Budd' },
+                  reviewBody: 'Christian has been terrific to work with. I value his energy for learning, teaching others, and creating an environment where everyone has fun. His thoroughness and attention to detail were key to making a great product.',
+                  itemReviewed: { '@id': 'https://christianbourlier.com/#person' },
+                },
               ],
             }),
           }}
         />
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-          strategy="afterInteractive"
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js')})}`,
+          }}
         />
-        <Script id="gtag-init" strategy="afterInteractive">
-          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`}
-        </Script>
       </head>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
       >
         <WebVitals />
-        <ThemeProvider paletteId={paletteId} colors={palette.colors}>{children}</ThemeProvider>
+        <CookieConsent />
+        <ThemeProvider paletteId={paletteId} colors={palette.colors}>
+          <ToastProvider>{children}</ToastProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

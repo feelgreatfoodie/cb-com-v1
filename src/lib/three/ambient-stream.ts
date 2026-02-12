@@ -34,7 +34,7 @@ export class AmbientStream {
       this.positions[i3 + 1] = (Math.random() - 0.5) * 6; // spread vertically
       this.positions[i3 + 2] = (Math.random() - 0.5) * 8; // spread in depth
 
-      this.velocities[i] = speed * (0.7 + Math.random() * 0.6);
+      this.velocities[i] = speed * (0.3 + Math.random() * 0.4);
       this.phases[i] = Math.random() * Math.PI * 2;
     }
 

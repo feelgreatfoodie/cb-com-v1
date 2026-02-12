@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { usePalette } from '@/lib/palette-context';
 
@@ -19,7 +19,38 @@ export function TypewriterCLI({
   const [currentLine, setCurrentLine] = useState('');
   const [cursorVisible, setCursorVisible] = useState(true);
   const terminalRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isVisibleRef = useRef(false);
   const { colors } = usePalette();
+
+  // Track visibility for pausing when off-screen
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { isVisibleRef.current = entry.isIntersecting; },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Wait helper that pauses when off-screen
+  const waitUntilVisible = useCallback((ms: number) => {
+    return new Promise<void>((resolve) => {
+      let elapsed = 0;
+      const tick = () => {
+        if (!isVisibleRef.current) {
+          setTimeout(tick, 200);
+          return;
+        }
+        elapsed += 16;
+        if (elapsed >= ms) resolve();
+        else setTimeout(tick, Math.min(ms - elapsed, 16));
+      };
+      tick();
+    });
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -33,7 +64,7 @@ export function TypewriterCLI({
         for (let charIdx = 0; charIdx <= cmd.length; charIdx++) {
           if (cancelled) return;
           setCurrentLine(cmd.slice(0, charIdx));
-          await new Promise((r) => setTimeout(r, typingSpeed));
+          await waitUntilVisible(typingSpeed);
         }
 
         // Pause, then move to completed lines
@@ -59,7 +90,7 @@ export function TypewriterCLI({
     return () => {
       cancelled = true;
     };
-  }, [commands, typingSpeed, pauseBetween]);
+  }, [commands, typingSpeed, pauseBetween, waitUntilVisible]);
 
   // Cursor blink
   useEffect(() => {
@@ -77,6 +108,7 @@ export function TypewriterCLI({
 
   return (
     <motion.div
+      ref={containerRef}
       className="glass overflow-hidden rounded-lg"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -88,7 +120,7 @@ export function TypewriterCLI({
         <div className="h-2.5 w-2.5 rounded-full" style={{ background: colors.cta }} />
         <div className="h-2.5 w-2.5 rounded-full" style={{ background: colors.stream3 }} />
         <div className="h-2.5 w-2.5 rounded-full" style={{ background: colors.stream1 }} />
-        <span className="ml-2 font-mono text-[10px] tracking-wider text-foreground/30">
+        <span className="ml-2 font-mono text-[11px] tracking-wider text-foreground/60">
           cachebash
         </span>
       </div>

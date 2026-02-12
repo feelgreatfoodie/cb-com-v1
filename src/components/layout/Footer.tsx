@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
+import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
 import { footer } from '@/config/content';
 import { onesheetMap } from '@/config/onesheet-map';
@@ -15,10 +16,12 @@ function SignatureReveal() {
 
   return (
     <div ref={ref} className="relative mx-auto mb-6 h-[6.6rem] w-full max-w-[22rem] sm:mb-8 sm:h-[21rem] sm:max-w-[78rem]">
-      <img
+      <Image
         src="/signature-white.png"
         alt="Christian Bourlier signature"
-        className="h-full w-full object-contain"
+        fill
+        sizes="(max-width: 640px) 22rem, 78rem"
+        className="object-contain"
         style={
           prefersReduced || !isInView
             ? {}
@@ -75,7 +78,7 @@ export function Footer() {
               <span key={section.anchor} className="flex items-center gap-3">
                 <a
                   href={section.anchor}
-                  className="font-mono text-xs tracking-wider text-foreground/40 transition-colors hover:text-accent"
+                  className="font-mono text-xs tracking-wider text-foreground/60 transition-colors hover:text-accent"
                 >
                   {section.label}
                 </a>

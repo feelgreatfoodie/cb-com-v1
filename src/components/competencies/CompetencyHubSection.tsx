@@ -21,7 +21,7 @@ export function CompetencyHubSection() {
         >
           <motion.h2
             variants={fadeInUp}
-            className="mb-4 font-mono text-xs tracking-[0.4em] text-accent/60"
+            className="font-mono text-2xl font-bold tracking-[0.15em] text-foreground sm:text-3xl md:text-4xl"
           >
             {competencies.title}
           </motion.h2>

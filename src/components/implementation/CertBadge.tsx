@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { fadeInUp } from '@/lib/animations/scroll-variants';
 
@@ -19,10 +20,12 @@ export function CertBadge({ name, badge }: CertBadgeProps) {
       variants={fadeInUp}
       className="flex flex-col items-center gap-3"
     >
-      <div className="glass flex h-24 w-24 items-center justify-center rounded-xl sm:h-32 sm:w-32">
-        <img
+      <div className="glass relative flex h-24 w-24 items-center justify-center rounded-xl sm:h-32 sm:w-32">
+        <Image
           src={badge}
           alt={name}
+          width={96}
+          height={96}
           className="h-16 w-16 object-contain sm:h-24 sm:w-24"
           onError={(e) => {
             (e.target as HTMLImageElement).style.display = 'none';

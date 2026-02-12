@@ -30,7 +30,7 @@ export function StreamCard({
   return (
     <motion.button
       className={cn(
-        'glass relative flex h-full w-full flex-col cursor-pointer rounded-xl p-4 text-left transition-all duration-300 sm:p-6',
+        'glass relative flex h-full w-full flex-col cursor-pointer rounded-xl p-4 text-left transition-all duration-300 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none sm:p-6',
         isRevealed && 'ring-1'
       )}
       style={{
@@ -49,6 +49,8 @@ export function StreamCard({
         onHover(false);
       }}
       onClick={onClick}
+      aria-label={isRevealed ? `${label}: collapse skills` : `${label}: reveal skills`}
+      aria-expanded={isRevealed}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
     >

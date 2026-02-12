@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { NoteHighway } from './NoteHighway';
 import { StreamCard } from './StreamCard';
@@ -16,6 +16,33 @@ export function JourneySection() {
   const scrollProgress = useScrollProgress(sectionRef);
   const { revealedStreams, revealStream } = useQuestStore();
   const { colors } = usePalette();
+
+  const cardsRef = useRef<HTMLDivElement>(null);
+
+  // Auto-reveal skills when the cards scroll into view (progressive disclosure)
+  useEffect(() => {
+    const el = cardsRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          const streamIds = ['data', 'sales', 'poker'] as const;
+          streamIds.forEach((id, i) => {
+            if (!revealedStreams[id]) {
+              setTimeout(() => revealStream(id), (i + 1) * 1200);
+            }
+          });
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.6 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [pausedStreams, setPausedStreams] = useState({
     data: false,
@@ -63,6 +90,7 @@ export function JourneySection() {
         </motion.div>
 
         <motion.div
+          ref={cardsRef}
           className="grid gap-4 sm:gap-6 md:grid-cols-3"
           variants={staggerContainer}
           initial="hidden"

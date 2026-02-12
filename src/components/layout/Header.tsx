@@ -1,12 +1,14 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { footer } from '@/config/content';
 import { palettes } from '@/config/palettes';
 import { usePalette } from '@/lib/palette-context';
 import { trackEvent } from '@/lib/analytics';
 import { useReducedMotionToggle } from '@/lib/hooks/useReducedMotion';
+import { useActiveSection } from '@/lib/hooks/useActiveSection';
+import { useToast } from '@/components/ui/Toast';
 
 function PaletteSwatch({ colors }: { colors: { background: string; accent: string; cta: string; stream1: string } }) {
   return (
@@ -23,6 +25,7 @@ function PaletteSwitcher() {
   const { paletteId, switchPalette } = usePalette();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const toast = useToast();
 
   // Close on click outside
   useEffect(() => {
@@ -50,7 +53,7 @@ function PaletteSwitcher() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 rounded-lg border border-accent/20 bg-transparent px-3 py-1.5 font-mono text-[10px] tracking-wider text-foreground/60 transition-all hover:border-accent/40 hover:text-foreground/90"
+        className="flex items-center gap-2 rounded-lg border border-accent/20 bg-transparent px-3 py-1.5 font-mono text-[11px] tracking-wider text-foreground/60 transition-all hover:border-accent/40 hover:text-foreground/90"
         aria-label="Switch color palette"
         aria-expanded={open}
       >
@@ -76,7 +79,7 @@ function PaletteSwitcher() {
             transition={{ duration: 0.15 }}
             className="glass absolute right-0 top-full z-50 mt-2 w-[calc(100vw-2rem)] max-w-64 overflow-hidden rounded-xl p-2 shadow-2xl sm:w-64"
           >
-            <p className="mb-2 px-2 pt-1 font-mono text-[9px] tracking-[0.3em] text-foreground/30">
+            <p className="mb-2 px-2 pt-1 font-mono text-[11px] tracking-[0.3em] text-foreground/30">
               CHOOSE YOUR PALETTE
             </p>
             {palettes.map((p) => (
@@ -85,6 +88,7 @@ function PaletteSwitcher() {
                 onClick={() => {
                   trackEvent('palette_switch', { palette_id: p.id });
                   switchPalette(p.id);
+                  toast(`Palette: ${p.name}`);
                   setOpen(false);
                 }}
                 className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-all hover:bg-accent/10 ${
@@ -109,16 +113,20 @@ function PaletteSwitcher() {
 
 function MotionToggle() {
   const { isReduced, toggle } = useReducedMotionToggle();
+  const toast = useToast();
 
   return (
     <button
-      onClick={toggle}
+      onClick={() => {
+        toggle();
+        toast(isReduced ? 'Animations enabled' : 'Animations disabled');
+      }}
       className="flex h-10 w-10 items-center justify-center rounded-lg border border-accent/20 bg-transparent transition-all hover:border-accent/40 sm:h-auto sm:w-auto sm:px-3 sm:py-1.5"
       aria-label={isReduced ? 'Enable animations' : 'Disable animations'}
       title={isReduced ? 'Animations off' : 'Animations on'}
     >
       {isReduced ? (
-        <svg className="h-4 w-4 text-foreground/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+        <svg className="h-4 w-4 text-foreground/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
           <circle cx="12" cy="12" r="10" />
           <path d="M8 12h8" />
         </svg>
@@ -139,6 +147,9 @@ const navLinks = footer.sections.filter(
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const activeSection = useActiveSection();
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
+  const mobileNavRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 50);
@@ -159,15 +170,50 @@ export function Header() {
     };
   }, [menuOpen]);
 
-  // Close on Escape key
+  // Close on Escape key + restore focus to hamburger
   useEffect(() => {
     if (!menuOpen) return;
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMenuOpen(false);
+      if (e.key === 'Escape') {
+        setMenuOpen(false);
+        hamburgerRef.current?.focus();
+      }
     };
     document.addEventListener('keydown', handler);
     return () => document.removeEventListener('keydown', handler);
   }, [menuOpen]);
+
+  // Focus trap: keep Tab cycling within mobile nav
+  const handleFocusTrap = useCallback((e: KeyboardEvent) => {
+    if (e.key !== 'Tab' || !mobileNavRef.current) return;
+    const focusable = mobileNavRef.current.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled])'
+    );
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    document.addEventListener('keydown', handleFocusTrap);
+    // Move focus into the nav on open
+    const timer = setTimeout(() => {
+      const firstLink = mobileNavRef.current?.querySelector<HTMLElement>('a[href]');
+      firstLink?.focus();
+    }, 100);
+    return () => {
+      document.removeEventListener('keydown', handleFocusTrap);
+      clearTimeout(timer);
+    };
+  }, [menuOpen, handleFocusTrap]);
 
   return (
     <header
@@ -186,7 +232,7 @@ export function Header() {
               e.preventDefault();
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className="flex h-10 w-10 items-center justify-center rounded-lg font-mono text-[10px] tracking-wider text-foreground/40 transition-colors hover:text-accent sm:h-auto sm:w-auto"
+            className="flex h-10 w-10 items-center justify-center rounded-lg font-mono text-[11px] tracking-wider text-foreground/60 transition-colors hover:text-accent sm:h-auto sm:w-auto"
             title="Back to top"
           >
             <svg className="h-5 w-5 sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
@@ -201,7 +247,7 @@ export function Header() {
               const decoded = atob(footer.links.emailEncoded);
               window.location.href = `mailto:${decoded}`;
             }}
-            className="flex h-10 w-10 items-center justify-center rounded-lg font-mono text-[10px] tracking-wider text-foreground/40 transition-colors hover:text-accent sm:h-auto sm:w-auto"
+            className="flex h-10 w-10 items-center justify-center rounded-lg font-mono text-[11px] tracking-wider text-foreground/60 transition-colors hover:text-accent sm:h-auto sm:w-auto"
             title="Send email"
           >
             <svg className="h-5 w-5 sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
@@ -213,7 +259,7 @@ export function Header() {
             href={footer.links.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:flex h-10 w-10 items-center justify-center rounded-lg font-mono text-[10px] tracking-wider text-foreground/40 transition-colors hover:text-accent sm:h-auto sm:w-auto"
+            className="hidden sm:flex h-10 w-10 items-center justify-center rounded-lg font-mono text-[11px] tracking-wider text-foreground/60 transition-colors hover:text-accent sm:h-auto sm:w-auto"
             title="LinkedIn"
           >
             <svg className="h-5 w-5 sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="currentColor">
@@ -224,7 +270,7 @@ export function Header() {
             href={footer.links.medium}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:flex h-10 w-10 items-center justify-center rounded-lg font-mono text-[10px] tracking-wider text-foreground/40 transition-colors hover:text-accent sm:h-auto sm:w-auto"
+            className="hidden sm:flex h-10 w-10 items-center justify-center rounded-lg font-mono text-[11px] tracking-wider text-foreground/60 transition-colors hover:text-accent sm:h-auto sm:w-auto"
             title="Medium"
           >
             <svg className="h-5 w-5 sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="currentColor">
@@ -239,7 +285,11 @@ export function Header() {
             <a
               key={s.anchor}
               href={s.anchor}
-              className="font-mono text-[10px] tracking-[0.15em] text-foreground/35 transition-colors hover:text-accent"
+              className={`font-mono text-[11px] tracking-[0.15em] transition-colors hover:text-accent ${
+                s.anchor === `#${activeSection}`
+                  ? 'text-accent border-b border-accent/60 pb-0.5'
+                  : 'text-foreground/60'
+              }`}
             >
               {s.label}
             </a>
@@ -251,6 +301,7 @@ export function Header() {
           <MotionToggle />
           <PaletteSwitcher />
           <button
+            ref={hamburgerRef}
             onClick={() => setMenuOpen(!menuOpen)}
             className="relative flex h-10 w-10 items-center justify-center rounded-lg transition-colors hover:bg-accent/10 xl:hidden"
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
@@ -287,16 +338,23 @@ export function Header() {
             transition={{ duration: 0.2 }}
             className="fixed inset-x-0 top-[64px] bottom-0 z-40 bg-background/95 backdrop-blur-xl xl:hidden"
           >
-            <nav className="flex flex-col items-center gap-1 px-6 pt-8" aria-label="Mobile navigation">
+            <nav ref={mobileNavRef} className="flex flex-col items-center gap-1 px-6 pt-8" aria-label="Mobile navigation">
               {navLinks.map((s, i) => (
                 <motion.a
                   key={s.anchor}
                   href={s.anchor}
-                  onClick={() => setMenuOpen(false)}
+                  onClick={() => {
+                    setMenuOpen(false);
+                    hamburgerRef.current?.focus();
+                  }}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  className="w-full rounded-lg py-3 text-center font-mono text-sm tracking-[0.15em] text-foreground/60 transition-colors hover:bg-accent/10 hover:text-accent"
+                  className={`w-full rounded-lg py-3 text-center font-mono text-sm tracking-[0.15em] transition-colors hover:bg-accent/10 hover:text-accent ${
+                    s.anchor === `#${activeSection}`
+                      ? 'text-accent bg-accent/5'
+                      : 'text-foreground/60'
+                  }`}
                 >
                   {s.label}
                 </motion.a>

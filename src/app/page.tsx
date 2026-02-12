@@ -5,6 +5,7 @@ import { Header } from '@/components/layout/Header';
 import { ScrollProgress } from '@/components/layout/ScrollProgress';
 import { KonamiOverlay } from '@/components/ui/KonamiOverlay';
 import { CursorTrail } from '@/components/ui/CursorTrail';
+import { ScrollToTop } from '@/components/ui/ScrollToTop';
 import { getMediumPosts } from '@/lib/medium';
 
 export const revalidate = 3600;
@@ -14,11 +15,18 @@ export default async function Home() {
 
   return (
     <>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:text-background focus:outline-none"
+      >
+        Skip to main content
+      </a>
       <Header />
       <ScrollProgress />
       <KonamiOverlay />
       <CursorTrail />
-      <main>
+      <ScrollToTop />
+      <main id="main-content">
         <HeroSection />
         <BelowFold posts={posts} />
       </main>

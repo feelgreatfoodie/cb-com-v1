@@ -54,7 +54,7 @@ export function BossFightSection() {
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
         >
-          <p className="mb-6 text-center font-mono text-xs tracking-[0.4em] text-accent/60">
+          <p className="mb-6 text-center font-mono text-xs tracking-[0.4em] text-accent/80">
             {bossfight.approach.title}
           </p>
           <ArchitectureMap isVisible={equationRevealed} />

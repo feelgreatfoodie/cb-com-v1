@@ -13,6 +13,7 @@ export function RiverScene() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const managerRef = useRef<SceneManager | null>(null);
   const [isVisible, setIsVisible] = useState(true);
+  const [webglFailed] = useState(() => !SceneManager.isWebGLAvailable());
   const prefersReduced = useReducedMotion();
   const device = useDeviceType();
   const { colors, int: intColors } = usePalette();
@@ -109,7 +110,7 @@ export function RiverScene() {
     };
   }, [prefersReduced, device, intColors]);
 
-  if (prefersReduced) {
+  if (prefersReduced || webglFailed) {
     return (
       <div
         className="absolute inset-0"

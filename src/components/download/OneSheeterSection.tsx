@@ -28,18 +28,18 @@ export function OneSheeterSection() {
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
         >
-          <motion.h2
-            variants={fadeInUp}
-            className="mb-4 font-mono text-2xl font-bold tracking-[0.15em] text-foreground sm:text-3xl md:text-4xl"
-          >
-            {oneSheeter.title}
-          </motion.h2>
           <motion.p
             variants={fadeInUp}
-            className="mb-12 font-mono text-sm text-foreground/50"
+            className="mb-2 font-mono text-xs tracking-[0.4em] text-accent"
           >
             {oneSheeter.subtitle}
           </motion.p>
+          <motion.h2
+            variants={fadeInUp}
+            className="mb-12 font-mono text-2xl font-bold tracking-[0.15em] text-foreground sm:text-3xl md:text-4xl"
+          >
+            {oneSheeter.title}
+          </motion.h2>
           <motion.div variants={fadeInUp} className="mb-12">
             <PDFPreview
               previewSrc={previewUrl}

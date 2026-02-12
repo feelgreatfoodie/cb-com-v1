@@ -15,6 +15,18 @@ function SectionPlaceholder({ height = 'min-h-[50vh]' }: { height?: string }) {
   );
 }
 
+function SectionDivider() {
+  return (
+    <div
+      className="mx-auto h-px w-3/4 max-w-3xl"
+      style={{
+        background:
+          'linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 20%, transparent), transparent)',
+      }}
+    />
+  );
+}
+
 const JourneySection = dynamic(
   () => import('@/components/journey/JourneySection').then((m) => ({ default: m.JourneySection })),
   { loading: () => <SectionPlaceholder height="min-h-[80vh]" /> }
@@ -56,13 +68,21 @@ export function BelowFold({ posts }: { posts: MediumPost[] }) {
   return (
     <>
       <JourneySection />
+      <SectionDivider />
       <CompetencyHubSection />
+      <SectionDivider />
       <OpenToSection />
+      <SectionDivider />
       <WorkshopSection />
+      <SectionDivider />
       <BossFightSection />
+      <SectionDivider />
       <ImplementationSection />
+      <SectionDivider />
       <WritingSection posts={posts} />
+      <SectionDivider />
       <OneSheeterSection />
+      <SectionDivider />
       <ContactSection />
     </>
   );

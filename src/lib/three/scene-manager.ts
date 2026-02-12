@@ -14,6 +14,15 @@ export class SceneManager {
   private animationId: number | null = null;
   private onUpdate: ((delta: number, elapsed: number) => void) | null = null;
 
+  static isWebGLAvailable(): boolean {
+    try {
+      const c = document.createElement('canvas');
+      return !!(c.getContext('webgl2') || c.getContext('webgl'));
+    } catch {
+      return false;
+    }
+  }
+
   constructor({ canvas, pixelRatio = 1, antialias = true }: SceneManagerOptions) {
     this.scene = new THREE.Scene();
 

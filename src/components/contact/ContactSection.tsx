@@ -87,18 +87,18 @@ export function ContactSection() {
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
         >
-          <motion.h2
-            variants={fadeInUp}
-            className="mb-4 font-mono text-2xl font-bold tracking-[0.15em] text-foreground sm:text-3xl md:text-4xl"
-          >
-            {contact.title}
-          </motion.h2>
           <motion.p
             variants={fadeInUp}
-            className="mb-12 font-mono text-sm text-foreground/50"
+            className="mb-2 font-mono text-xs tracking-[0.4em] text-accent"
           >
             {contact.subtitle}
           </motion.p>
+          <motion.h2
+            variants={fadeInUp}
+            className="mb-12 font-mono text-2xl font-bold tracking-[0.15em] text-foreground sm:text-3xl md:text-4xl"
+          >
+            {contact.title}
+          </motion.h2>
         </motion.div>
 
         <motion.form
@@ -124,7 +124,7 @@ export function ContactSection() {
           {/* Row 1: Name + Email */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
             <label className="block">
-              <span className="mb-1.5 block font-mono text-xs tracking-wider text-foreground/50">
+              <span className="mb-1.5 block font-mono text-xs tracking-wider text-foreground/60">
                 Name <span className="text-accent">*</span>
               </span>
               <input
@@ -138,7 +138,7 @@ export function ContactSection() {
               />
             </label>
             <label className="block">
-              <span className="mb-1.5 block font-mono text-xs tracking-wider text-foreground/50">
+              <span className="mb-1.5 block font-mono text-xs tracking-wider text-foreground/60">
                 Email <span className="text-accent">*</span>
               </span>
               <input
@@ -156,7 +156,7 @@ export function ContactSection() {
           {/* Row 2: Phone + LinkedIn */}
           <div className="mt-4 grid grid-cols-1 gap-4 sm:mt-6 sm:grid-cols-2 sm:gap-6">
             <label className="block">
-              <span className="mb-1.5 block font-mono text-xs tracking-wider text-foreground/50">
+              <span className="mb-1.5 block font-mono text-xs tracking-wider text-foreground/60">
                 Phone
               </span>
               <input
@@ -169,7 +169,7 @@ export function ContactSection() {
               />
             </label>
             <label className="block">
-              <span className="mb-1.5 block font-mono text-xs tracking-wider text-foreground/50">
+              <span className="mb-1.5 block font-mono text-xs tracking-wider text-foreground/60">
                 LinkedIn URL
               </span>
               <input
@@ -186,7 +186,7 @@ export function ContactSection() {
           {/* Row 3: Company (full width) */}
           <div className="mt-4 sm:mt-6">
             <label className="block">
-              <span className="mb-1.5 block font-mono text-xs tracking-wider text-foreground/50">
+              <span className="mb-1.5 block font-mono text-xs tracking-wider text-foreground/60">
                 Company
               </span>
               <input
@@ -203,7 +203,7 @@ export function ContactSection() {
           {/* Row 4: Message (full width, textarea) */}
           <div className="mt-4 sm:mt-6">
             <label className="block">
-              <span className="mb-1.5 block font-mono text-xs tracking-wider text-foreground/50">
+              <span className="mb-1.5 block font-mono text-xs tracking-wider text-foreground/60">
                 Message
               </span>
               <textarea
@@ -218,7 +218,7 @@ export function ContactSection() {
           </div>
 
           {/* Submit button + state feedback */}
-          <div className="mt-6 text-center sm:mt-8">
+          <div className="mt-6 text-center sm:mt-8" aria-live="polite" role="status">
             {formState === 'success' ? (
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
@@ -243,6 +243,7 @@ export function ContactSection() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     className="mt-3 font-mono text-xs text-red-400"
+                    role="alert"
                   >
                     {errorMsg}
                   </motion.p>

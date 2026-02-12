@@ -28,7 +28,7 @@ export function RoleCard({ title, description, brings }: RoleCardProps) {
           {brings.map((skill) => (
             <span
               key={skill}
-              className="rounded-full bg-accent/8 px-2.5 py-0.5 font-mono text-[10px] tracking-wide text-accent/80"
+              className="rounded-full bg-accent/8 px-2.5 py-0.5 font-mono text-[11px] tracking-wide text-accent/80"
             >
               {skill}
             </span>

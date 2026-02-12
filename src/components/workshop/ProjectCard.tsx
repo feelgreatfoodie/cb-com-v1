@@ -27,8 +27,11 @@ export function ProjectCard({
   const [showImage, setShowImage] = useState(false);
 
   return (
-    <motion.div
-      className="glass group flex h-full flex-col rounded-xl p-4 transition-all duration-300 hover:shadow-[0_0_40px_color-mix(in_srgb,var(--accent)_15%,transparent)] hover:border-accent/40 sm:p-6 cursor-pointer"
+    <motion.button
+      type="button"
+      className="glass group flex h-full w-full flex-col rounded-xl p-4 text-left transition-all duration-300 hover:shadow-[0_0_40px_color-mix(in_srgb,var(--accent)_15%,transparent)] hover:border-accent/40 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none sm:p-6 cursor-pointer"
+      aria-label={showImage ? `${name}: collapse preview` : `${name}: show preview`}
+      aria-expanded={showImage}
       onClick={() => {
         const next = !showImage;
         setShowImage(next);
@@ -65,7 +68,7 @@ export function ProjectCard({
       <p className="mb-4 text-sm text-foreground/60">{description}</p>
 
       <div className="mb-3">
-        <span className="font-mono text-[10px] tracking-[0.3em] text-accent/50">
+        <span className="font-mono text-[11px] tracking-[0.3em] text-accent/70">
           PROBLEM
         </span>
         <p className="mt-1 text-sm leading-relaxed text-foreground/80">
@@ -74,7 +77,7 @@ export function ProjectCard({
       </div>
 
       <div className="mb-4">
-        <span className="font-mono text-[10px] tracking-[0.3em] text-accent/50">
+        <span className="font-mono text-[11px] tracking-[0.3em] text-accent/70">
           WHY NOW
         </span>
         <p className="mt-1 text-sm leading-relaxed text-foreground/80">
@@ -88,7 +91,7 @@ export function ProjectCard({
         {tags.map((tag) => (
           <span
             key={tag}
-            className="rounded-md bg-accent/10 px-2 py-1 font-mono text-[10px] tracking-wide text-accent/70"
+            className="rounded-md bg-accent/10 px-2 py-1 font-mono text-[11px] tracking-wide text-accent/70"
           >
             {tag}
           </span>
@@ -104,15 +107,15 @@ export function ProjectCard({
             e.stopPropagation();
             trackEvent('project_cta_click', { project: name, url: url! });
           }}
-          className="mt-4 block text-center font-mono text-[10px] tracking-wider text-cta transition-colors hover:text-accent"
+          className="mt-4 block text-center font-mono text-[11px] tracking-wider text-cta transition-colors hover:text-accent"
         >
           [ EXPERIENCE IT LIVE &rarr; ]
         </a>
       ) : !showImage ? (
-        <div className="mt-4 text-center font-mono text-[10px] tracking-wider text-cta/50">
+        <div className="mt-4 text-center font-mono text-[11px] tracking-wider text-cta/50">
           {image ? '[ CLICK TO SEE PREVIEW ]' : '[ PREVIEW COMING SOON ]'}
         </div>
       ) : null}
-    </motion.div>
+    </motion.button>
   );
 }

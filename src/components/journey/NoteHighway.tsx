@@ -23,13 +23,12 @@ export function NoteHighway({ scrollSpeed, pausedStreams }: NoteHighwayProps) {
   const streamsRef = useRef<Map<string, AmbientStream>>(new Map());
   const prefersReduced = useReducedMotion();
   const device = useDeviceType();
-  const { int: intColors, colors } = usePalette();
-
-  const streamColors = [intColors.stream1, intColors.stream2, intColors.stream3];
+  const { int: intColors } = usePalette();
 
   const initScene = useCallback(() => {
+    const streamColors = [intColors.stream1, intColors.stream2, intColors.stream3];
     const canvas = canvasRef.current;
-    if (!canvas || prefersReduced) return;
+    if (!canvas || prefersReduced || !SceneManager.isWebGLAvailable()) return;
 
     const manager = new SceneManager({
       canvas,
@@ -77,7 +76,7 @@ export function NoteHighway({ scrollSpeed, pausedStreams }: NoteHighwayProps) {
       streamsRef.current.clear();
       manager.dispose();
     };
-  }, [prefersReduced, device, scrollSpeed, streamColors]);
+  }, [prefersReduced, device, scrollSpeed, intColors]);
 
   useEffect(() => {
     const cleanup = initScene();

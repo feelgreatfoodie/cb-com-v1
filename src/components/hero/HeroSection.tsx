@@ -2,12 +2,14 @@
 
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
+import { CanvasErrorBoundary } from './CanvasErrorBoundary';
 import { Button } from '@/components/ui/Button';
 import { GlowText } from '@/components/ui/GlowText';
 import { hero } from '@/config/content';
 import { useQuestStore } from '@/lib/hooks/useQuestStore';
 import { fadeInUp, staggerContainer } from '@/lib/animations/scroll-variants';
 import { trackEvent } from '@/lib/analytics';
+import { useToast } from '@/components/ui/Toast';
 
 function RiverScenePlaceholder() {
   return (
@@ -28,10 +30,12 @@ const RiverScene = dynamic(
 
 export function HeroSection() {
   const startQuest = useQuestStore((s) => s.startQuest);
+  const toast = useToast();
 
   const handleQuestStart = () => {
     trackEvent('hero_cta_click');
     startQuest();
+    toast('Quest started');
     const journeyEl = document.getElementById('journey');
     journeyEl?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -41,7 +45,9 @@ export function HeroSection() {
       id="hero"
       className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background"
     >
-      <RiverScene />
+      <CanvasErrorBoundary fallback={<RiverScenePlaceholder />}>
+        <RiverScene />
+      </CanvasErrorBoundary>
 
       {/* Overlay gradient for text readability */}
       <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/60" />

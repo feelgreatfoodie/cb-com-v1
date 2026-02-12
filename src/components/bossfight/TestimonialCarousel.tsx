@@ -80,21 +80,18 @@ export function TestimonialCarousel({
     [goNext, goPrev]
   );
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') goNext();
-      if (e.key === 'ArrowLeft') goPrev();
-    };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [goNext, goPrev]);
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowRight') { goNext(); e.preventDefault(); }
+    if (e.key === 'ArrowLeft') { goPrev(); e.preventDefault(); }
+  };
 
   const current = testimonials[index];
 
   return (
     <div
-      className="mx-auto max-w-2xl"
+      className="mx-auto max-w-2xl focus-visible:outline-none"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={handleTouchStart}
@@ -121,7 +118,7 @@ export function TestimonialCarousel({
             </p>
             <footer className="font-mono text-sm text-accent">
               — {current.author},{' '}
-              <span className="text-foreground/50">{current.role}</span>
+              <span className="text-foreground/60">{current.role}</span>
             </footer>
           </motion.blockquote>
         </AnimatePresence>

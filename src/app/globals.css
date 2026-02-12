@@ -65,3 +65,73 @@ body {
   background: color-mix(in srgb, var(--accent) 30%, transparent);
   color: var(--foreground);
 }
+
+/* Print stylesheet */
+@media print {
+  /* Force readable colors */
+  body {
+    background: #fff !important;
+    color: #111 !important;
+    overflow: visible !important;
+  }
+
+  /* Hide non-essential UI */
+  header,
+  .scroll-progress,
+  canvas,
+  .cookie-consent,
+  [role="dialog"],
+  button[aria-label="Switch color palette"],
+  button[aria-label*="animations"] {
+    display: none !important;
+  }
+
+  /* Hide interactive-only elements */
+  [data-print-hide] {
+    display: none !important;
+  }
+
+  /* Remove glassmorphism */
+  .glass {
+    background: #f9f9f9 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+  }
+
+  /* Remove glow effects */
+  .bloom-text {
+    text-shadow: none !important;
+  }
+
+  /* Flatten animations / transforms */
+  * {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+
+  /* Make links visible */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.7em;
+    color: #666;
+    word-break: break-all;
+  }
+
+  /* Prevent page breaks inside cards */
+  section {
+    page-break-inside: avoid;
+  }
+
+  /* Ensure text is dark */
+  h1, h2, h3, h4, p, span, li {
+    color: #111 !important;
+  }
+
+  /* Keep footer signature visible but static */
+  footer img {
+    filter: invert(1) !important;
+  }
+}
