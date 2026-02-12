@@ -13,6 +13,7 @@ interface StreamCardProps {
   onHover: (hovered: boolean) => void;
   onClick: () => void;
   isRevealed: boolean;
+  testimonial?: { quote: string; author: string; role: string };
 }
 
 export function StreamCard({
@@ -24,6 +25,7 @@ export function StreamCard({
   onHover,
   onClick,
   isRevealed,
+  testimonial,
 }: StreamCardProps) {
   const [hovered, setHovered] = useState(false);
 
@@ -86,11 +88,10 @@ export function StreamCard({
       <AnimatePresence>
         {isRevealed && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="overflow-hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
           >
             <div className="flex flex-wrap gap-2 pt-4">
               {skills.map((skill, i) => (
@@ -110,6 +111,26 @@ export function StreamCard({
                 </motion.span>
               ))}
             </div>
+            {testimonial && (
+              <motion.blockquote
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  delay: skills.length * 0.05 + 0.15,
+                  duration: 0.4,
+                }}
+                className="mt-4 border-l-2 pl-3"
+                style={{ borderColor: `${color}AA` }}
+              >
+                <p className="text-[12px] italic leading-relaxed text-foreground/60 sm:text-[13px]">
+                  &ldquo;{testimonial.quote}&rdquo;
+                </p>
+                <footer className="mt-1 text-[11px]">
+                  <span style={{ color }}>{testimonial.author}</span>
+                  <span className="text-foreground/50"> — {testimonial.role}</span>
+                </footer>
+              </motion.blockquote>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

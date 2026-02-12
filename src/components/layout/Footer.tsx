@@ -7,6 +7,7 @@ import { footer, decodeEmail } from '@/config/content';
 import { onesheetMap } from '@/config/palettes';
 import { usePalette } from '@/lib/palette-context';
 import { useReducedMotion } from '@/lib/hooks/useReducedMotion';
+import { useAnalyticsToggle } from '@/components/ui/CookieConsent';
 import { fadeInUp, staggerContainer } from '@/lib/animations/scroll-variants';
 
 function SignatureReveal() {
@@ -46,7 +47,8 @@ function SignatureReveal() {
 
 export function Footer() {
   const { paletteId } = usePalette();
-  const pdfUrl = onesheetMap[paletteId] ?? onesheetMap['porto-data-streams'];
+  const pdfUrl = onesheetMap[paletteId] ?? onesheetMap['nazare-wavefronts'];
+  const toggleAnalytics = useAnalyticsToggle();
 
   return (
     <footer className="relative bg-background py-16">
@@ -149,17 +151,28 @@ export function Footer() {
           </a>
         </motion.div>
 
-        <motion.p
+        <motion.div
           variants={fadeInUp}
-          className="mt-2 font-mono text-xs text-foreground/20"
+          className="mt-2 flex items-center justify-center gap-2"
         >
-          {footer.links.website}
-        </motion.p>
+          <p className="font-mono text-xs text-foreground/20">
+            {footer.links.website}
+          </p>
+          <span className="text-foreground/10">·</span>
+          <button
+            type="button"
+            onClick={toggleAnalytics}
+            className="font-mono text-xs text-foreground/20 transition-colors hover:text-foreground/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:rounded"
+            aria-label="Toggle analytics settings"
+          >
+            Analytics Settings
+          </button>
+        </motion.div>
 
-        {/* Hidden admin link — only visible on hover */}
+        {/* Hidden admin link — subtle, visible on hover */}
         <a
           href="/admin"
-          className="mt-6 inline-block opacity-[0.08] transition-opacity duration-500 hover:opacity-60"
+          className="mt-6 inline-block opacity-[0.15] transition-opacity duration-500 hover:opacity-60"
           aria-label="Admin"
         >
           <svg

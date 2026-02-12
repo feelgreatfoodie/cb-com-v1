@@ -13,10 +13,10 @@ import { trackEvent } from '@/lib/analytics';
 export function OneSheeterSection() {
   const { paletteId } = usePalette();
   const markDownloaded = useQuestStore((s) => s.markDownloaded);
-  const pdfUrl = onesheetMap[paletteId] ?? onesheetMap['porto-data-streams'];
+  const pdfUrl = onesheetMap[paletteId] ?? onesheetMap['nazare-wavefronts'];
   const previewUrl =
     onesheetPreviewMap[paletteId] ??
-    onesheetPreviewMap['porto-data-streams'];
+    onesheetPreviewMap['nazare-wavefronts'];
 
   return (
     <section id="onesheeter" className="relative bg-background py-16 sm:py-24">

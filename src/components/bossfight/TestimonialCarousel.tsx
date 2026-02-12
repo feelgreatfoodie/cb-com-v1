@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useReducedMotion } from '@/lib/hooks/useReducedMotion';
 
 interface Testimonial {
   readonly quote: string;
@@ -34,6 +35,7 @@ export function TestimonialCarousel({
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [isPaused, setIsPaused] = useState(false);
+  const prefersReduced = useReducedMotion();
 
   const goTo = useCallback(
     (next: number) => {
@@ -55,6 +57,10 @@ export function TestimonialCarousel({
     );
   }, [testimonials.length]);
 
+  const togglePause = useCallback(() => {
+    setIsPaused((prev) => !prev);
+  }, []);
+
   // Auto-advance
   useEffect(() => {
     if (isPaused) return;
@@ -62,27 +68,36 @@ export function TestimonialCarousel({
     return () => clearInterval(timer);
   }, [isPaused, goNext]);
 
-  // Touch swipe
+  // Touch: distinguish tap (pause) from swipe (navigate)
   const touchStartX = useRef(0);
+  const touchStartTime = useRef(0);
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     touchStartX.current = e.changedTouches[0].clientX;
+    touchStartTime.current = Date.now();
   }, []);
 
   const handleTouchEnd = useCallback(
     (e: React.TouchEvent) => {
       const diff = touchStartX.current - e.changedTouches[0].clientX;
+      const elapsed = Date.now() - touchStartTime.current;
+
       if (Math.abs(diff) > 50) {
+        // Swipe — navigate
         if (diff > 0) goNext();
         else goPrev();
+      } else if (elapsed < 300) {
+        // Quick tap — toggle pause
+        togglePause();
       }
     },
-    [goNext, goPrev]
+    [goNext, goPrev, togglePause]
   );
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowRight') { goNext(); e.preventDefault(); }
     if (e.key === 'ArrowLeft') { goPrev(); e.preventDefault(); }
+    if (e.key === ' ') { togglePause(); e.preventDefault(); }
   };
 
   const current = testimonials[index];
@@ -124,20 +139,55 @@ export function TestimonialCarousel({
         </AnimatePresence>
       </div>
 
-      {/* Dot indicators */}
-      <div className="mt-6 flex items-center justify-center gap-2">
-        {testimonials.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => goTo(i)}
-            className={`h-2 rounded-full transition-all duration-300 ${
-              i === index
-                ? 'w-6 bg-accent'
-                : 'w-2 bg-foreground/20 hover:bg-foreground/40'
-            }`}
-            aria-label={`Go to testimonial ${i + 1}`}
-          />
-        ))}
+      {/* Controls: dots + pause/play */}
+      <div className="mt-6 flex items-center justify-center gap-3">
+        {/* Dot indicators */}
+        <div className="flex items-center gap-2">
+          {testimonials.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              className="relative h-2 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              style={{
+                width: i === index ? '1.5rem' : '0.5rem',
+                backgroundColor: i === index
+                  ? 'var(--accent)'
+                  : 'color-mix(in srgb, var(--foreground) 20%, transparent)',
+              }}
+              aria-label={`Go to testimonial ${i + 1}`}
+            >
+              {/* Progress animation on active dot */}
+              {i === index && !isPaused && !prefersReduced && (
+                <motion.span
+                  className="absolute inset-0 rounded-full bg-accent/40"
+                  initial={{ scaleX: 0, originX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 6, ease: 'linear' }}
+                  key={`progress-${index}`}
+                />
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* Pause / Play toggle */}
+        <button
+          onClick={togglePause}
+          type="button"
+          className="flex h-6 w-6 items-center justify-center rounded-full text-foreground/30 transition-colors hover:text-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          aria-label={isPaused ? 'Resume auto-advance' : 'Pause auto-advance'}
+        >
+          {isPaused ? (
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">
+              <polygon points="2,0 12,6 2,12" />
+            </svg>
+          ) : (
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">
+              <rect x="1" y="0" width="3.5" height="12" rx="1" />
+              <rect x="7.5" y="0" width="3.5" height="12" rx="1" />
+            </svg>
+          )}
+        </button>
       </div>
     </div>
   );

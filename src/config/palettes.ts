@@ -18,6 +18,21 @@ export interface Palette {
 
 export const palettes: Palette[] = [
   {
+    id: 'nazare-wavefronts',
+    name: 'Nazaré Wavefronts',
+    category: 'portuguese',
+    colors: {
+      background: '#0A2342',
+      backgroundLight: '#133366',
+      accent: '#20B2AA',
+      cta: '#FF5733',
+      foreground: '#F8F9FA',
+      stream1: '#20B2AA',
+      stream2: '#FF5733',
+      stream3: '#4DC8E0',
+    },
+  },
+  {
     id: 'porto-data-streams',
     name: 'Porto Data Streams',
     category: 'portuguese',
@@ -45,21 +60,6 @@ export const palettes: Palette[] = [
       stream1: '#0047AB',
       stream2: '#2F4F4F',
       stream3: '#FFB800',
-    },
-  },
-  {
-    id: 'nazare-wavefronts',
-    name: 'Nazaré Wavefronts',
-    category: 'portuguese',
-    colors: {
-      background: '#0A2342',
-      backgroundLight: '#133366',
-      accent: '#20B2AA',
-      cta: '#FF5733',
-      foreground: '#F8F9FA',
-      stream1: '#20B2AA',
-      stream2: '#FF5733',
-      stream3: '#4DC8E0',
     },
   },
   {
@@ -139,7 +139,7 @@ export const palettes: Palette[] = [
   },
 ];
 
-export const DEFAULT_PALETTE_ID = 'porto-data-streams';
+export const DEFAULT_PALETTE_ID = 'nazare-wavefronts';
 
 export function getPalette(id: string): Palette {
   return palettes.find((p) => p.id === id) ?? palettes[0];

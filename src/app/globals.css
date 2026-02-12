@@ -66,17 +66,19 @@ body {
   color: var(--foreground);
 }
 
-/* Print stylesheet */
+/* Print stylesheet — preserves active palette theme */
 @media print {
-  /* Force readable colors */
+  /* Keep the theme colors, ensure backgrounds print */
   body {
-    background: #fff !important;
-    color: #111 !important;
     overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
   }
 
   /* Hide non-essential UI */
   header,
+  footer,
   .scroll-progress,
   canvas,
   .cookie-consent,
@@ -91,12 +93,11 @@ body {
     display: none !important;
   }
 
-  /* Remove glassmorphism */
+  /* Simplify glassmorphism for print (keep themed colors) */
   .glass {
-    background: #f9f9f9 !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    border: 1px solid #ddd !important;
+    background: var(--background-light) !important;
     box-shadow: none !important;
   }
 
@@ -112,26 +113,8 @@ body {
     transform: none !important;
   }
 
-  /* Make links visible */
-  a[href^="http"]::after {
-    content: " (" attr(href) ")";
-    font-size: 0.7em;
-    color: #666;
-    word-break: break-all;
-  }
-
   /* Prevent page breaks inside cards */
   section {
     page-break-inside: avoid;
-  }
-
-  /* Ensure text is dark */
-  h1, h2, h3, h4, p, span, li {
-    color: #111 !important;
-  }
-
-  /* Keep footer signature visible but static */
-  footer img {
-    filter: invert(1) !important;
   }
 }
