@@ -7,7 +7,7 @@ import { CanvasErrorBoundary } from './CanvasErrorBoundary';
 import { AvailabilityPill } from './AvailabilityPill';
 import { Button } from '@/components/ui/Button';
 import { GlowText } from '@/components/ui/GlowText';
-import { TestimonialCarousel } from '@/components/bossfight/TestimonialCarousel';
+const TestimonialCarousel = dynamic(() => import('@/components/bossfight/TestimonialCarousel').then(m => m.TestimonialCarousel), { ssr: false });
 import { hero, intentOverrides, bossfight } from '@/config/content';
 import { useQuestStore } from '@/lib/hooks/useQuestStore';
 import { useVisitorIntent } from '@/lib/hooks/useVisitorIntent';

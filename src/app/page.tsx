@@ -1,14 +1,16 @@
+import dynamic from 'next/dynamic';
 import { HeroSection } from '@/components/hero/HeroSection';
 import { BelowFold } from '@/components/layout/BelowFold';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
-import { ScrollProgress } from '@/components/layout/ScrollProgress';
-import { KonamiOverlay } from '@/components/ui/KonamiOverlay';
 import { CursorTrail } from '@/components/ui/CursorTrail';
 import { ScrollToTop } from '@/components/ui/ScrollToTop';
-import { SmartCTA } from '@/components/ui/SmartCTA';
 import { ChatWidgetLoader } from '@/components/ui/ChatWidgetLoader';
 import { getMediumPosts } from '@/lib/medium';
+
+const ScrollProgress = dynamic(() => import('@/components/layout/ScrollProgress').then(m => m.ScrollProgress), { ssr: false });
+const KonamiOverlay = dynamic(() => import('@/components/ui/KonamiOverlay').then(m => m.KonamiOverlay), { ssr: false });
+const SmartCTA = dynamic(() => import('@/components/ui/SmartCTA').then(m => m.SmartCTA), { ssr: false });
 
 export const revalidate = 3600;
 
