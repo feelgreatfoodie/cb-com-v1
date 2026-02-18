@@ -56,7 +56,6 @@ export function ProjectCard({
                 height={400}
                 className="h-full w-full rounded object-contain"
                 sizes="(max-width: 768px) 100vw, 33vw"
-                loading="lazy"
               />
             </div>
           </motion.div>
