@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic';
 import { HeroSection } from '@/components/hero/HeroSection';
 import { BelowFold } from '@/components/layout/BelowFold';
 import { Footer } from '@/components/layout/Footer';
@@ -8,9 +7,8 @@ import { KonamiOverlay } from '@/components/ui/KonamiOverlay';
 import { CursorTrail } from '@/components/ui/CursorTrail';
 import { ScrollToTop } from '@/components/ui/ScrollToTop';
 import { SmartCTA } from '@/components/ui/SmartCTA';
+import { ChatWidgetLoader } from '@/components/ui/ChatWidgetLoader';
 import { getMediumPosts } from '@/lib/medium';
-
-const ChatWidget = dynamic(() => import('@/components/ui/ChatWidget').then(m => m.ChatWidget), { ssr: false });
 
 export const revalidate = 3600;
 
@@ -31,7 +29,7 @@ export default async function Home() {
       <CursorTrail />
       <ScrollToTop />
       <SmartCTA />
-      <ChatWidget />
+      <ChatWidgetLoader />
       <main id="main-content">
         <HeroSection />
         <BelowFold posts={posts} />
