@@ -27,9 +27,13 @@ function toTitleCase(slug: string): string {
 
 export async function getMediumPosts(count: number = 3): Promise<MediumPost[]> {
   try {
-    const feed = await parser.parseURL(
-      'https://medium.com/feed/@christianbourlier',
+    const timeoutPromise = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('Medium RSS timeout')), 3000)
     );
+    const feed = await Promise.race([
+      parser.parseURL('https://medium.com/feed/@christianbourlier'),
+      timeoutPromise,
+    ]);
 
     return (feed.items ?? []).slice(0, count).map((item) => ({
       title: item.title ?? 'Untitled',
