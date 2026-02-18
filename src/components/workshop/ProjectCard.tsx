@@ -62,14 +62,14 @@ export function ProjectCard({
         )}
       </AnimatePresence>
 
-      <div className="flex-1">
+      <div className="flex-1 flex flex-col justify-start">
         <h3 className="mb-1 font-mono text-lg font-bold text-cta">
           {name}
         </h3>
         <p className="text-sm text-foreground/60">{description}</p>
       </div>
 
-      <div className="flex-1">
+      <div className="flex-1 flex flex-col justify-start">
         <span className="font-mono text-[11px] tracking-[0.3em] text-accent/70">
           PROBLEM
         </span>
@@ -78,7 +78,7 @@ export function ProjectCard({
         </p>
       </div>
 
-      <div className="flex-1">
+      <div className="flex-1 flex flex-col justify-start">
         <span className="font-mono text-[11px] tracking-[0.3em] text-accent/70">
           WHY NOW
         </span>
