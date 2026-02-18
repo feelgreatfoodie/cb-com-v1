@@ -28,18 +28,6 @@ export function Header() {
     return () => window.removeEventListener('scroll', handler);
   }, []);
 
-  // Body scroll lock when mobile menu is open
-  useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [menuOpen]);
-
   // Close on Escape key + restore focus to hamburger
   useEffect(() => {
     if (!menuOpen) return;
@@ -53,7 +41,24 @@ export function Header() {
     return () => document.removeEventListener('keydown', handler);
   }, [menuOpen]);
 
-  // Focus trap: keep Tab cycling within mobile nav
+  // Close on outside click
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (
+        mobileNavRef.current &&
+        !mobileNavRef.current.contains(e.target as Node) &&
+        hamburgerRef.current &&
+        !hamburgerRef.current.contains(e.target as Node)
+      ) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [menuOpen]);
+
+  // Focus trap: keep Tab cycling within nav dropdown
   const handleFocusTrap = useCallback((e: KeyboardEvent) => {
     if (e.key !== 'Tab' || !mobileNavRef.current) return;
     const focusable = mobileNavRef.current.querySelectorAll<HTMLElement>(
@@ -74,7 +79,6 @@ export function Header() {
   useEffect(() => {
     if (!menuOpen) return;
     document.addEventListener('keydown', handleFocusTrap);
-    // Move focus into the nav on open
     const timer = setTimeout(() => {
       const firstLink = mobileNavRef.current?.querySelector<HTMLElement>('a[href]');
       firstLink?.focus();
@@ -94,7 +98,7 @@ export function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
-        {/* Left: home + contact links */}
+        {/* Left: home + email + LinkedIn + Medium */}
         <div className="flex items-center gap-1 sm:gap-3">
           <a
             href="#hero"
@@ -146,31 +150,9 @@ export function Header() {
               <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zm7.42 0c0 3.54-1.51 6.42-3.38 6.42S14.2 15.54 14.2 12s1.52-6.42 3.38-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z" />
             </svg>
           </a>
-          <a
-            href={footer.links.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden sm:flex h-10 w-10 items-center justify-center rounded-lg font-mono text-[11px] tracking-wider text-foreground/60 transition-colors hover:text-accent sm:h-auto sm:w-auto"
-            title="GitHub"
-          >
-            <svg className="h-5 w-5 sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
-            </svg>
-          </a>
-          <a
-            href={footer.links.rezzedai}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden sm:flex h-10 w-10 items-center justify-center rounded-lg font-mono text-[11px] tracking-wider text-foreground/60 transition-colors hover:text-accent sm:h-auto sm:w-auto"
-            title="Rezzed.ai"
-          >
-            <svg className="h-5 w-5 sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-              <path d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
-            </svg>
-          </a>
         </div>
 
-        {/* Right: Let's Connect CTA + a11y toggle + hamburger */}
+        {/* Right: Let's Connect CTA + PaletteSwitcher + MotionToggle + hamburger */}
         <div className="flex items-center gap-2">
           <a
             href="#contact"
@@ -187,6 +169,7 @@ export function Header() {
               Admin
             </a>
           )}
+          <PaletteSwitcher />
           <MotionToggle />
           <button
             ref={hamburgerRef}
@@ -216,81 +199,34 @@ export function Header() {
         </div>
       </div>
 
-      {/* Sidebar overlay */}
+      {/* Compact nav dropdown — right-anchored, auto-height */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-x-0 top-[64px] bottom-0 z-40 overflow-y-auto bg-background/95 backdrop-blur-xl"
+            initial={{ opacity: 0, y: -8, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.97 }}
+            transition={{ duration: 0.15 }}
+            className="glass absolute right-4 top-full mt-1 z-40 w-64 rounded-xl py-2 shadow-xl shadow-black/20"
           >
-            <nav ref={mobileNavRef} className="flex flex-col items-center gap-1 px-6 pt-8 pb-12" aria-label="Sidebar navigation">
-              {navLinks.map((s, i) => (
-                <motion.a
+            <nav ref={mobileNavRef} className="flex flex-col" aria-label="Navigation">
+              {navLinks.map((s) => (
+                <a
                   key={s.anchor}
                   href={s.anchor}
                   onClick={() => {
                     setMenuOpen(false);
                     hamburgerRef.current?.focus();
                   }}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                  className={`w-full rounded-lg py-3 text-center font-mono text-sm tracking-[0.15em] transition-colors hover:bg-accent/10 hover:text-accent ${
+                  className={`px-4 py-2.5 font-mono text-[11px] tracking-[0.15em] transition-colors hover:bg-accent/10 hover:text-accent ${
                     s.anchor === `#${activeSection}`
                       ? 'text-accent bg-accent/5'
                       : 'text-foreground/60'
                   }`}
                 >
                   {s.label}
-                </motion.a>
+                </a>
               ))}
-
-              {/* Social links */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: navLinks.length * 0.05 }}
-                className="mt-4 flex items-center justify-center gap-4"
-              >
-                <a
-                  href={footer.links.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex h-10 w-10 items-center justify-center rounded-lg text-foreground/60 transition-colors hover:text-accent"
-                  title="GitHub"
-                >
-                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
-                  </svg>
-                </a>
-                <a
-                  href={footer.links.rezzedai}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex h-10 w-10 items-center justify-center rounded-lg text-foreground/60 transition-colors hover:text-accent"
-                  title="Rezzed.ai"
-                >
-                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-                    <path d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
-                  </svg>
-                </a>
-              </motion.div>
-
-              {/* Theme switcher */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: navLinks.length * 0.05 + 0.05 }}
-                className="mt-6 w-full border-t border-foreground/10 pt-6"
-              >
-                <p className="mb-3 text-center font-mono text-[11px] tracking-[0.3em] text-foreground/40">THEME</p>
-                <PaletteSwitcher />
-              </motion.div>
             </nav>
           </motion.div>
         )}
