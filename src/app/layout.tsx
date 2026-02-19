@@ -19,7 +19,7 @@ const inter = Inter({
 const jetbrainsMono = JetBrains_Mono({
   variable: '--font-jetbrains-mono',
   subsets: ['latin'],
-  display: 'optional',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {

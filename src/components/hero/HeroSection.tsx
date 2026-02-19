@@ -93,21 +93,23 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/60" />
 
       <m.div
-        className="relative z-10 mx-auto max-w-4xl px-4 text-center sm:px-6"
+        className="relative z-10 mx-auto max-w-4xl px-4 pt-20 text-center sm:px-6"
         variants={staggerContainer}
         initial={false}
         animate="visible"
       >
         <m.h1
           variants={fadeInUp}
-          className="mb-2 font-mono text-3xl font-bold tracking-[0.15em] text-foreground sm:text-5xl sm:tracking-[0.2em] md:text-6xl lg:text-7xl"
+          className="mb-2 font-mono text-3xl font-bold tracking-[0.12em] text-foreground sm:text-5xl sm:tracking-[0.15em] md:text-6xl lg:text-7xl"
+          style={{ textIndent: '0.15em' }}
         >
           {hero.headline}
         </m.h1>
 
         <m.p
           variants={fadeInUp}
-          className="mb-8 font-mono text-sm tracking-[0.3em] text-accent sm:text-base"
+          className="mb-8 font-mono text-sm tracking-[0.25em] text-accent sm:text-base"
+          style={{ textIndent: '0.25em' }}
         >
           {subheadline}
         </m.p>
