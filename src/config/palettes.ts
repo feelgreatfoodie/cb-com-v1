@@ -96,8 +96,8 @@ export function hexToInt(hex: string): number {
 
 export const onesheetMap: Record<string, string> = {
   'pastel-de-nata': '/onesheets/onesheeter-pastel-de-nata.pdf',
-  'nazare-wavefronts': '/onesheets/onesheeter-nazare-wavefronts.pdf',
-  'azulejo-algorithms': '/onesheets/onesheeter-azulejo-algorithms.pdf',
+  'nazare-wavefronts': '/onesheets/onesheeter-nazare-wave-systems.pdf',
+  'azulejo-algorithms': '/onesheets/onesheeter-azulejo-protocols.pdf',
   'porto-data-streams': '/onesheets/onesheeter-porto-data-streams.pdf',
 };
 
