@@ -4,7 +4,6 @@ import { useEffect, useRef } from 'react';
 import { m } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { CanvasErrorBoundary } from './CanvasErrorBoundary';
-import { AvailabilityPill } from './AvailabilityPill';
 import { Button } from '@/components/ui/Button';
 import { GlowText } from '@/components/ui/GlowText';
 import { TestimonialCarousel } from '@/components/bossfight/TestimonialCarousel';
@@ -113,10 +112,6 @@ export function HeroSection() {
         >
           {subheadline}
         </m.p>
-
-        <m.div variants={fadeInUp}>
-          <AvailabilityPill status={hero.availability} />
-        </m.div>
 
         <m.p variants={fadeInUp} className="mb-12 text-xl sm:text-2xl">
           <span className="text-foreground">I build the system </span>

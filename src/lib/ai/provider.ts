@@ -177,7 +177,7 @@ class MockProvider implements AIProvider {
     {
       pattern: /contact|hire|work with|reach/i,
       response:
-        "You can reach Christian through the contact form on this site, or connect on LinkedIn at linkedin.com/in/christianbourlier. He's open to opportunities as an AI Strategist, Solutions Engineer, Solutions Architect, or Technical Account Manager.",
+        "You can reach Christian through the contact form on this site, or connect on LinkedIn at linkedin.com/in/christianbourlier.",
     },
     {
       pattern: /poker|card|gambl/i,
