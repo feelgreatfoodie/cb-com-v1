@@ -3,7 +3,6 @@ export const hero = {
   subheadline: 'ARCHITECT. STRATEGIST. OPERATOR.',
   hook: 'I build the system AND close the deal.',
   cta: 'Journey Onward',
-  availability: 'Open to opportunities',
 } as const;
 
 export const journey = {
@@ -361,21 +360,17 @@ export const smartCta = {
 
 export const intentOverrides: Record<string, {
   subheadline?: string;
-  availability?: string;
   ctaLabel?: string;
 }> = {
   recruiter: {
     subheadline: 'PRINCIPAL AI ARCHITECT | MCP SERVER AUTHOR',
-    availability: 'Available for Q2 2026 engagements',
   },
   client: {
     subheadline: 'AI SOLUTIONS ARCHITECT | PRODUCTION GENAI SYSTEMS',
-    availability: 'Booking discovery calls',
     ctaLabel: 'See My Work',
   },
   engineer: {
     subheadline: 'AI ARCHITECT & MCP SERVER AUTHOR',
-    availability: 'Open to collaborations',
   },
 };
 
