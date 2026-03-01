@@ -19,7 +19,7 @@ export interface Palette {
 export const palettes: Palette[] = [
   {
     id: 'nazare-wavefronts',
-    name: 'Nazaré Wavefronts',
+    name: 'Nazaré Wave Systems',
     category: 'portuguese',
     colors: {
       background: '#0A2342',
@@ -65,11 +65,11 @@ export function hexToInt(hex: string): number {
 }
 
 export const onesheetMap: Record<string, string> = {
-  'nazare-wavefronts': '/onesheets/onesheeter-nazare-wavefronts.pdf',
+  'nazare-wavefronts': '/onesheets/onesheeter-nazare-wave-systems.pdf',
   'pastel-de-nata': '/onesheets/onesheeter-pastel-de-nata.pdf',
 };
 
 export const onesheetPreviewMap: Record<string, string> = {
-  'nazare-wavefronts': '/onesheet-previews/preview-nazare-wavefronts.png',
+  'nazare-wavefronts': '/onesheet-previews/preview-nazare-wave-systems.png',
   'pastel-de-nata': '/onesheet-previews/preview-pastel-de-nata.png',
 };
