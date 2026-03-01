@@ -1,9 +1,8 @@
 export const hero = {
   headline: 'CHRISTIAN BOURLIER',
-  subheadline: 'AI SOLUTIONS ARCHITECT',
+  subheadline: 'ARCHITECT. STRATEGIST. OPERATOR.',
   hook: 'I build the system AND close the deal.',
   cta: 'Journey Onward',
-  availability: 'Open to opportunities',
 } as const;
 
 export const journey = {
@@ -192,7 +191,7 @@ export const workshop = {
   projects: [
     {
       name: 'Rezzed.ai',
-      description: 'Tools for developers who code with AI',
+      description: 'Rezzing tools and systems for developers who code with AI',
       problem:
         'AI-assisted development is exploding but tooling for multi-agent orchestration barely exists.',
       whyNow: 'Developers need infrastructure that keeps up with how they actually build.',
@@ -202,9 +201,9 @@ export const workshop = {
     },
     {
       name: 'CacheBash',
-      description: 'Async dispatch for AI agents — monitor, message, and respond from your phone.',
+      description: 'Your AI agents control panel, from your phone.',
       problem:
-        'AI coding agents need you at your desk. Step away and the conversation stops — questions unanswered, sessions stalled, momentum lost.',
+        'AI agents need you at your desk. Leave and the conversation ends — questions unanswered, sessions hang, momentum lost.',
       whyNow: 'AI-assisted development is exploding. The tooling assumes you never leave your chair.',
       tags: ['MCP Server', 'Mobile', 'AI DevTools'],
       image: '/cachebash-preview.svg',
@@ -218,13 +217,22 @@ export const workshop = {
     },
     {
       name: 'OptiMeasure',
-      description: 'Cookieless attribution engine — MMM lite',
+      description: 'Cookieless attribution engine — Marketing Mix Modeling lite',
       problem:
         'Cookie deprecation is breaking attribution; black-box solutions self-inflate contribution.',
       whyNow: 'Privacy regs accelerating — marketers need trust.',
       tags: ['Marketing Analytics', 'Privacy-First'],
-      image: '/optimeasure-dashboard.webp',
+      image: '/optimeasure-preview.svg',
       url: 'https://optimeasure.io',
+    },
+    {
+      name: 'christianbourlier.com',
+      description: 'The site you\'re on — built from scratch, not a template.',
+      problem:
+        'Portfolio sites are static brochures. They don\'t show how someone actually builds.',
+      whyNow: 'If the portfolio is the pitch, the engineering should be the proof.',
+      tags: ['Next.js', 'Gemini AI', 'Three.js', '8-Palette Engine', 'PWA'],
+      image: '/site-preview.svg',
     },
   ],
 } as const;
@@ -284,6 +292,12 @@ export const bossfight = {
       author: 'Matthew Walvick',
       role: 'Healthcare Technology Physician',
     },
+    {
+      quote:
+        'He has a quality that\'s hard to teach and even harder to find. He is genuine. He is outcome-driven. And he makes the people around him feel seen, heard, and respected. You don\'t just get someone who does the job. You get someone who improves the room. That\'s what creates lasting results.',
+      author: 'Rich Luby',
+      role: 'Career Services Director',
+    },
   ],
 } as const;
 
@@ -309,8 +323,8 @@ export const implementation = {
     { name: 'TensorFlow', category: 'ai' },
   ],
   certifications: [
-    { name: 'GCP Professional Data Engineer', badge: '/gcp-pde.png' },
-    { name: 'GCP Professional Cloud Architect', badge: '/gcp-pca.png' },
+    { name: 'GCP Professional Data Engineer', badge: '/gcp-pde.webp' },
+    { name: 'GCP Professional Cloud Architect', badge: '/gcp-pca.webp' },
   ],
 } as const;
 
@@ -346,21 +360,17 @@ export const smartCta = {
 
 export const intentOverrides: Record<string, {
   subheadline?: string;
-  availability?: string;
   ctaLabel?: string;
 }> = {
   recruiter: {
-    subheadline: 'AI SOLUTIONS ARCHITECT & DATA ENGINEER',
-    availability: 'Available for Q2 2026 engagements',
+    subheadline: 'PRINCIPAL AI ARCHITECT | MCP SERVER AUTHOR',
   },
   client: {
-    subheadline: 'AI SOLUTIONS ARCHITECT',
-    availability: 'Booking discovery calls',
+    subheadline: 'AI SOLUTIONS ARCHITECT | PRODUCTION GENAI SYSTEMS',
     ctaLabel: 'See My Work',
   },
   engineer: {
-    subheadline: 'AI ARCHITECT & FULL-STACK ENGINEER',
-    availability: 'Open to collaborations',
+    subheadline: 'AI ARCHITECT & MCP SERVER AUTHOR',
   },
 };
 
@@ -385,7 +395,7 @@ export const footer = {
     { label: 'Journey', anchor: '#journey' },
     { label: 'Open To', anchor: '#opento' },
     { label: 'Workshop', anchor: '#workshop' },
-    { label: 'Boss Fight', anchor: '#bossfight' },
+    { label: 'Endgame', anchor: '#bossfight' },
     { label: 'Writing', anchor: '#writing' },
     { label: 'Contact', anchor: '#contact' },
   ],

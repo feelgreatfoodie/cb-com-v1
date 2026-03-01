@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { useReducedMotion } from '@/lib/hooks/useReducedMotion';
 
 interface Testimonial {
@@ -34,6 +34,7 @@ export function TestimonialCarousel({
 }: TestimonialCarouselProps) {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(1);
+  const [paused, setPaused] = useState(false);
   const prefersReduced = useReducedMotion();
 
   const goTo = useCallback(
@@ -56,11 +57,12 @@ export function TestimonialCarousel({
     );
   }, [testimonials.length]);
 
-  // Auto-advance
+  // Auto-advance (pauses on hover)
   useEffect(() => {
+    if (paused) return;
     const timer = setInterval(goNext, 6000);
     return () => clearInterval(timer);
-  }, [goNext]);
+  }, [goNext, paused]);
 
   // Touch: distinguish tap (pause) from swipe (navigate)
   const touchStartX = useRef(0);
@@ -96,13 +98,15 @@ export function TestimonialCarousel({
       onKeyDown={handleKeyDown}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
       role="region"
       aria-label="Testimonials"
       aria-roledescription="carousel"
     >
       <div className="relative min-h-[220px] sm:min-h-[200px]">
-        <AnimatePresence mode="wait" custom={direction}>
-          <motion.blockquote
+        <AnimatePresence initial={false} mode="wait" custom={direction}>
+          <m.blockquote
             key={index}
             custom={direction}
             variants={slideVariants}
@@ -117,10 +121,22 @@ export function TestimonialCarousel({
               &ldquo;{current.quote}&rdquo;
             </p>
             <footer className="font-mono text-sm text-accent">
-              — {current.author},{' '}
+              <span className="inline-flex items-center gap-1.5">
+                — {current.author}
+                <svg
+                  className="inline-block h-3.5 w-3.5 text-accent/30"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-label="Sourced from LinkedIn"
+                  role="img"
+                >
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+              </span>
+              ,{' '}
               <span className="text-foreground/60">{current.role}</span>
             </footer>
-          </motion.blockquote>
+          </m.blockquote>
         </AnimatePresence>
       </div>
 
@@ -154,8 +170,8 @@ export function TestimonialCarousel({
               aria-label={`Go to testimonial ${i + 1}`}
             >
               {/* Progress animation on active dot */}
-              {i === index && !prefersReduced && (
-                <motion.span
+              {i === index && !prefersReduced && !paused && (
+                <m.span
                   className="absolute inset-0 rounded-full bg-accent/40"
                   initial={{ scaleX: 0, originX: 0 }}
                   animate={{ scaleX: 1 }}

@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import Image from 'next/image';
-import { motion, useInView } from 'framer-motion';
+import { m, useInView } from 'framer-motion';
 import { footer, decodeEmail } from '@/config/content';
 import { onesheetMap } from '@/config/palettes';
 import { usePalette } from '@/lib/palette-context';
@@ -26,7 +26,7 @@ function SignatureReveal() {
   return (
     <div ref={ref} className="relative mx-auto mb-6 h-[6.6rem] w-full max-w-[22rem] sm:mb-8 sm:h-[21rem] sm:max-w-[78rem]">
       <Image
-        src="/signature-white.png"
+        src="/signature-white.webp"
         alt="Christian Bourlier signature"
         fill
         sizes="(max-width: 640px) 22rem, 78rem"
@@ -70,7 +70,7 @@ export function Footer() {
         }}
       />
 
-      <motion.div
+      <m.div
         className="mx-auto max-w-4xl px-6 text-center"
         variants={staggerContainer}
         initial="hidden"
@@ -78,7 +78,7 @@ export function Footer() {
         viewport={{ once: true }}
       >
         {/* Section nav */}
-        <motion.nav
+        <m.nav
           variants={fadeInUp}
           className="mb-6 flex flex-wrap items-center justify-center gap-1.5 sm:mb-10 sm:gap-3"
           aria-label="Footer navigation"
@@ -98,13 +98,13 @@ export function Footer() {
                 )}
               </span>
             ))}
-        </motion.nav>
+        </m.nav>
 
         {/* Signature animation */}
         <SignatureReveal />
 
         {/* Contact links */}
-        <motion.div
+        <m.div
           variants={fadeInUp}
           className="mb-6 flex flex-wrap items-center justify-center gap-3 sm:mb-8 sm:flex-nowrap sm:gap-6"
         >
@@ -150,6 +150,19 @@ export function Footer() {
           <span className="text-foreground/20">|</span>
 
           <a
+            href={footer.links.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group font-mono text-xs text-foreground/60 transition-all duration-300 hover:text-accent sm:text-sm"
+          >
+            <span className="inline-block transition-shadow duration-300 group-hover:bloom-text">
+              GitHub
+            </span>
+          </a>
+
+          <span className="text-foreground/20">|</span>
+
+          <a
             href={footer.links.medium}
             target="_blank"
             rel="noopener noreferrer"
@@ -171,9 +184,9 @@ export function Footer() {
               One-Sheeter
             </span>
           </a>
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           variants={fadeInUp}
           className="mt-2 flex items-center justify-center gap-2"
         >
@@ -189,7 +202,7 @@ export function Footer() {
           >
             Analytics Settings
           </button>
-        </motion.div>
+        </m.div>
 
         {/* Hidden admin link — subtle, visible on hover */}
         <a
@@ -211,7 +224,7 @@ export function Footer() {
             <circle cx="12" cy="12" r="3" />
           </svg>
         </a>
-      </motion.div>
+      </m.div>
     </footer>
   );
 }

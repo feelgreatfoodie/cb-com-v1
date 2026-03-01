@@ -1,10 +1,9 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { CanvasErrorBoundary } from './CanvasErrorBoundary';
-import { AvailabilityPill } from './AvailabilityPill';
 import { Button } from '@/components/ui/Button';
 import { GlowText } from '@/components/ui/GlowText';
 import { TestimonialCarousel } from '@/components/bossfight/TestimonialCarousel';
@@ -17,13 +16,35 @@ import { useToast } from '@/components/ui/Toast';
 
 function RiverScenePlaceholder() {
   return (
-    <div
-      className="absolute inset-0"
-      style={{
-        background:
-          'linear-gradient(135deg, var(--background) 0%, color-mix(in srgb, var(--accent) 13%, transparent) 50%, var(--background) 100%)',
-      }}
-    />
+    <div className="absolute inset-0" style={{ background: 'var(--background)' }}>
+      <style>{`
+        @keyframes rsFloat {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-8px); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .rs-particle { animation: none !important; }
+        }
+      `}</style>
+      <div className="rs-particle" style={{
+        position: 'absolute', width: '6px', height: '6px', borderRadius: '50%',
+        background: 'var(--stream1)', opacity: 0.4,
+        top: '35%', left: '25%',
+        animation: 'rsFloat 4s ease-in-out infinite',
+      }} />
+      <div className="rs-particle" style={{
+        position: 'absolute', width: '4px', height: '4px', borderRadius: '50%',
+        background: 'var(--stream2)', opacity: 0.3,
+        top: '55%', left: '65%',
+        animation: 'rsFloat 5s ease-in-out infinite 1s',
+      }} />
+      <div className="rs-particle" style={{
+        position: 'absolute', width: '5px', height: '5px', borderRadius: '50%',
+        background: 'var(--stream1)', opacity: 0.35,
+        top: '70%', left: '40%',
+        animation: 'rsFloat 6s ease-in-out infinite 2s',
+      }} />
+    </div>
   );
 }
 
@@ -70,37 +91,35 @@ export function HeroSection() {
       {/* Overlay gradient for text readability */}
       <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/60" />
 
-      <motion.div
-        className="relative z-10 mx-auto max-w-4xl px-4 text-center sm:px-6"
+      <m.div
+        className="relative z-10 mx-auto max-w-4xl px-4 pt-20 text-center sm:px-6"
         variants={staggerContainer}
-        initial="hidden"
+        initial={false}
         animate="visible"
       >
-        <motion.h1
+        <m.h1
           variants={fadeInUp}
-          className="mb-2 font-mono text-3xl font-bold tracking-[0.15em] text-foreground sm:text-5xl sm:tracking-[0.2em] md:text-6xl lg:text-7xl"
+          className="mb-2 font-mono text-3xl font-bold tracking-[0.12em] text-foreground sm:text-5xl sm:tracking-[0.15em] md:text-6xl lg:text-7xl"
+          style={{ textIndent: '0.15em' }}
         >
           {hero.headline}
-        </motion.h1>
+        </m.h1>
 
-        <motion.p
+        <m.p
           variants={fadeInUp}
-          className="mb-8 font-mono text-sm tracking-[0.3em] text-accent sm:text-base"
+          className="mb-8 font-mono text-sm tracking-[0.25em] text-accent sm:text-base"
+          style={{ textIndent: '0.25em' }}
         >
           {subheadline}
-        </motion.p>
+        </m.p>
 
-        <motion.div variants={fadeInUp}>
-          <AvailabilityPill status={hero.availability} />
-        </motion.div>
-
-        <motion.p variants={fadeInUp} className="mb-12 text-xl sm:text-2xl">
+        <m.p variants={fadeInUp} className="mb-12 text-xl sm:text-2xl">
           <span className="text-foreground">I build the system </span>
           <GlowText intensity="high">AND</GlowText>
           <span className="text-foreground"> close the deal.</span>
-        </motion.p>
+        </m.p>
 
-        <motion.div variants={fadeInUp}>
+        <m.div variants={fadeInUp}>
           <Button
             variant="primary"
             onClick={handleQuestStart}
@@ -109,12 +128,12 @@ export function HeroSection() {
           >
             {ctaLabel}
           </Button>
-        </motion.div>
+        </m.div>
 
-        <motion.div variants={fadeInUp} className="mt-12">
+        <m.div variants={fadeInUp} className="mt-12">
           <TestimonialCarousel testimonials={bossfight.testimonials} />
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
 
       {/* Scroll indicator — CSS animation to avoid FM in critical path */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-[fadeIn_1s_2s_both]">

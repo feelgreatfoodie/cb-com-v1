@@ -15,6 +15,13 @@ export function RiverScene() {
   const device = useDeviceType();
   const { colors, int: intColors } = usePalette();
 
+  const nav = typeof navigator !== 'undefined' ? navigator as Navigator & {
+    connection?: { effectiveType?: string; saveData?: boolean };
+  } : null;
+  const isSlowConnection = nav?.connection?.effectiveType === '2g' ||
+    nav?.connection?.effectiveType === 'slow-2g' ||
+    nav?.connection?.saveData === true;
+
   // Check WebGL on mount
   useEffect(() => {
     import('@/lib/three/scene-manager').then(({ SceneManager }) => {
@@ -48,7 +55,7 @@ export function RiverScene() {
   // Deferred init — only create meshes/materials when first visible
   const initScene = useCallback(async () => {
     const canvas = canvasRef.current;
-    if (!canvas || initialized || prefersReduced || webglFailed) return;
+    if (!canvas || initialized || prefersReduced || webglFailed || isSlowConnection) return;
 
     const [THREE, { SceneManager }, { createRiverMesh, updateRiverTime }, { ParticleSystem }] =
       await Promise.all([
@@ -84,8 +91,8 @@ export function RiverScene() {
       count: device.particleCount,
       spread: { x: 10, y: 4, z: 6 },
       color: new THREE.Color(intColors.accent),
-      size: device.type === 'mobile' ? 0.04 : 0.03,
-      speed: 0.2,
+      size: device.type === 'mobile' ? 0.07 : 0.05,
+      speed: 0.5,
     });
     manager.scene.add(particles.points);
 
@@ -94,8 +101,8 @@ export function RiverScene() {
       count: Math.floor(device.particleCount * 0.3),
       spread: { x: 8, y: 3, z: 4 },
       color: new THREE.Color(intColors.stream1),
-      size: 0.02,
-      speed: 0.15,
+      size: 0.04,
+      speed: 0.35,
     });
     manager.scene.add(accentParticles.points);
 
@@ -127,19 +134,19 @@ export function RiverScene() {
       manager.dispose();
       managerRef.current = null;
     };
-  }, [initialized, prefersReduced, webglFailed, device, intColors]);
+  }, [initialized, prefersReduced, webglFailed, isSlowConnection, device, intColors]);
 
   // Trigger init when first visible
   useEffect(() => {
-    if (isVisible && !initialized && !prefersReduced && !webglFailed) {
+    if (isVisible && !initialized && !prefersReduced && !webglFailed && !isSlowConnection) {
       const cleanup = initScene();
       return () => {
         cleanup?.then((fn) => fn?.());
       };
     }
-  }, [isVisible, initialized, prefersReduced, webglFailed, initScene]);
+  }, [isVisible, initialized, prefersReduced, webglFailed, isSlowConnection, initScene]);
 
-  if (prefersReduced || webglFailed) {
+  if (prefersReduced || webglFailed || isSlowConnection) {
     return (
       <div
         className="absolute inset-0"

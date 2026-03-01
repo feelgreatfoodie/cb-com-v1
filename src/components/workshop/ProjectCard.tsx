@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { LiveStatusBadge } from '@/components/ui/LiveStatusBadge';
 import { trackEvent } from '@/lib/analytics';
 
@@ -28,9 +28,9 @@ export function ProjectCard({
   const [showImage, setShowImage] = useState(false);
 
   return (
-    <motion.button
+    <m.button
       type="button"
-      className="glass group flex h-full w-full flex-col rounded-xl p-4 text-left transition-all duration-300 hover:shadow-[0_0_40px_color-mix(in_srgb,var(--accent)_15%,transparent)] hover:border-accent/40 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none sm:p-6 cursor-pointer"
+      className="glass group flex h-full w-full flex-col gap-6 rounded-xl p-6 text-left transition-all duration-300 hover:shadow-[0_0_40px_color-mix(in_srgb,var(--accent)_15%,transparent)] hover:border-accent/40 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none sm:p-8 cursor-pointer"
       aria-label={showImage ? `${name}: collapse preview` : `${name}: show preview`}
       aria-expanded={showImage}
       onClick={() => {
@@ -41,12 +41,12 @@ export function ProjectCard({
     >
       <AnimatePresence>
         {image && showImage && (
-          <motion.div
+          <m.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="-mx-4 -mt-4 mb-4 overflow-hidden rounded-t-xl sm:-mx-6 sm:-mt-6 sm:mb-6"
+            className="-mx-6 -mt-6 overflow-hidden rounded-t-xl sm:-mx-8 sm:-mt-8"
           >
             <div className="aspect-[2/1] rounded-lg bg-black/30 p-[10px]">
               <Image
@@ -58,16 +58,18 @@ export function ProjectCard({
                 sizes="(max-width: 768px) 100vw, 33vw"
               />
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
-      <h3 className="mb-1 font-mono text-lg font-bold text-cta">
-        {name}
-      </h3>
-      <p className="mb-4 text-sm text-foreground/60">{description}</p>
+      <div className="flex-1 flex flex-col justify-start">
+        <h3 className="mb-1 font-mono text-lg font-bold text-cta">
+          {name}
+        </h3>
+        <p className="text-sm text-foreground/60">{description}</p>
+      </div>
 
-      <div className="mb-3">
+      <div className="flex-1 flex flex-col justify-start">
         <span className="font-mono text-[11px] tracking-[0.3em] text-accent/70">
           PROBLEM
         </span>
@@ -76,7 +78,7 @@ export function ProjectCard({
         </p>
       </div>
 
-      <div className="mb-4">
+      <div className="flex-1 flex flex-col justify-start">
         <span className="font-mono text-[11px] tracking-[0.3em] text-accent/70">
           WHY NOW
         </span>
@@ -84,8 +86,6 @@ export function ProjectCard({
           {whyNow}
         </p>
       </div>
-
-      <div className="flex-1" />
 
       <div className="flex flex-wrap gap-1.5">
         {tags.map((tag) => (
@@ -121,6 +121,6 @@ export function ProjectCard({
           {image ? '[ CLICK TO SEE PREVIEW ]' : '[ PREVIEW COMING SOON ]'}
         </div>
       )}
-    </motion.button>
+    </m.button>
   );
 }

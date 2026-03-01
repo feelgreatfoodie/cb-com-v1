@@ -1,13 +1,22 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { m, AnimatePresence } from 'framer-motion';
 
 export function ScrollToTop() {
   const [visible, setVisible] = useState(false);
+  const ticking = useRef(false);
 
   useEffect(() => {
-    const handler = () => setVisible(window.scrollY > window.innerHeight);
+    const handler = () => {
+      if (!ticking.current) {
+        ticking.current = true;
+        requestAnimationFrame(() => {
+          setVisible(window.scrollY > window.innerHeight);
+          ticking.current = false;
+        });
+      }
+    };
     window.addEventListener('scroll', handler, { passive: true });
     handler();
     return () => window.removeEventListener('scroll', handler);
@@ -16,7 +25,7 @@ export function ScrollToTop() {
   return (
     <AnimatePresence>
       {visible && (
-        <motion.button
+        <m.button
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
@@ -36,7 +45,7 @@ export function ScrollToTop() {
           >
             <path d="M18 15l-6-6-6 6" />
           </svg>
-        </motion.button>
+        </m.button>
       )}
     </AnimatePresence>
   );

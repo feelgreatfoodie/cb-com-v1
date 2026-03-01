@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { contact } from '@/config/content';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils/cn';
 import { fadeInUp, staggerContainer } from '@/lib/animations/scroll-variants';
 import { trackEvent } from '@/lib/analytics';
+import { useScrollReveal } from '@/lib/hooks/useScrollReveal';
 
 type FormState = 'idle' | 'submitting' | 'success' | 'error';
 
@@ -37,6 +38,8 @@ function parseResponse(text: string): SolverResult {
 }
 
 export function ContactSection() {
+  const { ref: formRef, isVisible: formVisible } = useScrollReveal({ threshold: 0.1, rootMargin: '-50px' });
+
   // Challenge / Problem Solver state
   const [challenge, setChallenge] = useState('');
   const [solverResult, setSolverResult] = useState<SolverResult | null>(null);
@@ -62,7 +65,7 @@ export function ContactSection() {
 
     setAnalyzing(true);
     setSolverResult(null);
-    trackEvent('problem_solver_submit');
+    trackEvent('problem_solver_submit', { challenge: challenge.trim() });
 
     try {
       const response = await fetch('/api/chat', {
@@ -141,33 +144,30 @@ export function ContactSection() {
   return (
     <section id="contact" className="relative bg-background py-16 sm:py-24">
       <div className="mx-auto max-w-2xl px-4 sm:px-6">
-        <motion.div
+        <m.div
           className="text-center"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
         >
-          <motion.p
+          <m.p
             variants={fadeInUp}
             className="mb-2 font-mono text-sm tracking-[0.3em] text-accent"
           >
             {contact.subtitle}
-          </motion.p>
-          <motion.h2
+          </m.p>
+          <m.h2
             variants={fadeInUp}
             className="mb-12 font-mono text-3xl font-bold tracking-[0.15em] text-foreground sm:text-4xl md:text-5xl"
           >
             {contact.title}
-          </motion.h2>
-        </motion.div>
+          </m.h2>
+        </m.div>
 
-        <motion.div
-          className="glass rounded-2xl p-6 sm:p-8"
-          variants={fadeInUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-50px' }}
+        <div
+          ref={formRef}
+          className={cn('glass rounded-2xl p-6 sm:p-8 scroll-reveal', formVisible && 'visible')}
         >
           <form onSubmit={handleSubmitContact}>
             {/* Honeypot */}
@@ -185,7 +185,7 @@ export function ContactSection() {
             {/* Step 1: Challenge */}
             <div>
               <label htmlFor="challenge-input" className="mb-1.5 block font-mono text-xs tracking-wider text-foreground/60">
-                Describe your challenge
+                Describe your challenge — Answered NOW by AI
               </label>
               <textarea
                 id="challenge-input"
@@ -232,7 +232,7 @@ export function ContactSection() {
             {/* Results */}
             <AnimatePresence>
               {solverResult && !analyzing && (
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
@@ -257,14 +257,14 @@ export function ContactSection() {
                   <p className="text-center font-mono text-[11px] text-foreground/30">
                     AI-generated analysis — not from Christian directly
                   </p>
-                </motion.div>
+                </m.div>
               )}
             </AnimatePresence>
 
             {/* Soft transition to contact fields */}
             <AnimatePresence>
               {solverResult && !analyzing && (
-                <motion.div
+                <m.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.4 }}
@@ -275,7 +275,7 @@ export function ContactSection() {
                     Want to take this further?
                   </span>
                   <div className="h-px flex-1 bg-accent/15" />
-                </motion.div>
+                </m.div>
               )}
             </AnimatePresence>
 
@@ -386,13 +386,13 @@ export function ContactSection() {
             {/* Submit */}
             <div className="mt-6 text-center sm:mt-8" aria-live="polite" role="status">
               {formState === 'success' ? (
-                <motion.p
+                <m.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="font-mono text-sm text-accent"
                 >
                   {contact.successMessage}
-                </motion.p>
+                </m.p>
               ) : (
                 <>
                   <Button
@@ -414,20 +414,20 @@ export function ContactSection() {
                     </p>
                   )}
                   {formState === 'error' && (
-                    <motion.p
+                    <m.p
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       className="mt-3 font-mono text-xs text-red-400"
                       role="alert"
                     >
                       {errorMsg}
-                    </motion.p>
+                    </m.p>
                   )}
                 </>
               )}
             </div>
           </form>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

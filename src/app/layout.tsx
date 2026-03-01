@@ -6,14 +6,14 @@ import { ThemeProvider } from '@/lib/palette-context';
 import { WebVitals } from '@/components/layout/WebVitals';
 import { CookieConsent } from '@/components/ui/CookieConsent';
 import { ToastProvider } from '@/components/ui/Toast';
-import { SessionWrapper } from '@/components/layout/SessionWrapper';
 import { getStructuredData } from '@/lib/seo/structured-data';
+import { MotionProvider } from '@/components/providers/MotionProvider';
 import './globals.css';
 
 const inter = Inter({
   variable: '--font-inter',
   subsets: ['latin'],
-  display: 'swap',
+  display: 'optional',
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -24,28 +24,40 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://christianbourlier.com'),
-  title: 'Christian Bourlier | Solutions Architect & Data Engineer',
+  title: 'Christian Bourlier | Architect. Strategist. Operator.',
   description:
-    'Solutions Architect, Data Engineer, AI/ML Engineer & Technical Account Manager. 8+ years data engineering on GCP, 20 years enterprise sales.',
+    'Principal AI & Data Solutions Architect. MCP Server Author. Production GenAI systems on Claude, Gemini & Vertex AI. I build the system AND close the deal.',
   keywords: [
     'Christian Bourlier',
+    'Principal AI Solutions Architect',
+    'MCP Server Author',
+    'Model Context Protocol',
+    'Production GenAI',
+    'Claude API',
+    'Gemini',
+    'Vertex AI',
+    'Agentic Workflows',
+    'Multi-Agent Systems',
+    'RAG Pipelines',
+    'AI Strategy',
+    'LLM Orchestration',
+    'Prompt Engineering',
+    'AI Native Development',
     'Solutions Architect',
     'Data Engineer',
     'AI/ML Engineer',
     'Technical Account Manager',
-    'Technical Solutions Partner',
-    'Technical Engineering',
-    'Solutions Architecture',
     'GCP Professional Data Engineer',
     'GCP Professional Cloud Architect',
     'BigQuery',
-    'Vertex AI',
     'LangChain',
     'Python',
     'TypeScript',
     'Enterprise Sales',
     'Cloud Architecture',
     'Machine Learning',
+    'Anthropic',
+    'Rezzed AI',
   ],
   alternates: {
     canonical: 'https://christianbourlier.com',
@@ -55,9 +67,9 @@ export const metadata: Metadata = {
   category: 'Technology',
   manifest: '/manifest.webmanifest',
   openGraph: {
-    title: 'Christian Bourlier | Solutions Architect & Data Engineer',
+    title: 'Christian Bourlier | Architect. Strategist. Operator.',
     description:
-      'Solutions Architect, Data Engineer, AI/ML Engineer & Technical Account Manager. 8+ years data engineering on GCP, 20 years enterprise sales.',
+      'Principal AI & Data Solutions Architect. MCP Server Author. Production GenAI systems on Claude, Gemini & Vertex AI. I build the system AND close the deal.',
     type: 'website',
     url: 'https://christianbourlier.com',
     siteName: 'Christian Bourlier',
@@ -67,15 +79,15 @@ export const metadata: Metadata = {
         url: '/opengraph-image',
         width: 1200,
         height: 630,
-        alt: 'Christian Bourlier | Solutions Architect & Data Engineer',
+        alt: 'Christian Bourlier | Architect. Strategist. Operator.',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Christian Bourlier | Solutions Architect & Data Engineer',
+    title: 'Christian Bourlier | Architect. Strategist. Operator.',
     description:
-      'Solutions Architect, Data Engineer, AI/ML Engineer & Technical Account Manager. 8+ years data engineering on GCP, 20 years enterprise sales.',
+      'Principal AI & Data Solutions Architect. MCP Server Author. Production GenAI systems on Claude, Gemini & Vertex AI. I build the system AND close the deal.',
     images: ['/twitter-image'],
   },
 };
@@ -108,12 +120,6 @@ export default async function RootLayout({
       style={cssVarsFromPalette(palette.colors) as React.CSSProperties}
     >
       <head>
-        <link rel="preconnect" href="https://www.youtube.com" />
-        <link rel="preconnect" href="https://i.ytimg.com" />
-        <link rel="preconnect" href="https://cdn-images-1.medium.com" />
-        <link rel="dns-prefetch" href="https://www.youtube.com" />
-        <link rel="dns-prefetch" href="https://i.ytimg.com" />
-        <link rel="dns-prefetch" href="https://cdn-images-1.medium.com" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(getStructuredData()) }}
@@ -123,17 +129,22 @@ export default async function RootLayout({
             __html: `if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js')})}`,
           }}
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `setTimeout(function(){console.log('%cBom dia from Christian Bourlier.%c\\n\\nYou have entered the wine cellars and are allowed to enjoy a glass of port while you are here. Please drop me a line if you\\'d like to fill your cup further.','font-size:16px;font-weight:bold;color:#E3A018;','font-size:13px;color:#8B6E52;')},2000);`,
+          }}
+        />
       </head>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
       >
         <WebVitals />
         <CookieConsent />
-        <SessionWrapper>
+        <MotionProvider>
           <ThemeProvider paletteId={paletteId} colors={palette.colors}>
             <ToastProvider>{children}</ToastProvider>
           </ThemeProvider>
-        </SessionWrapper>
+        </MotionProvider>
       </body>
     </html>
   );
