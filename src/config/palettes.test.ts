@@ -47,7 +47,7 @@ describe('getPalette', () => {
   it('returns the correct palette for a valid id', () => {
     const palette = getPalette('nazare-wavefronts');
     expect(palette.id).toBe('nazare-wavefronts');
-    expect(palette.name).toBe('Nazaré Wavefronts');
+    expect(palette.name).toBe('Nazaré Wave Systems');
   });
 
   it('falls back to first palette for unknown id', () => {

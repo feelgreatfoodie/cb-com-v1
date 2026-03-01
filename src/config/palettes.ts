@@ -34,7 +34,7 @@ export const palettes: Palette[] = [
   },
   {
     id: 'nazare-wavefronts',
-    name: 'Nazaré Wavefronts',
+    name: 'Nazaré Wave Systems',
     category: 'portuguese',
     colors: {
       background: '#0A2342',
@@ -102,8 +102,8 @@ export const onesheetMap: Record<string, string> = {
 };
 
 export const onesheetPreviewMap: Record<string, string> = {
-  'pastel-de-nata': '/onesheet-previews/preview-pastel-de-nata.webp',
-  'nazare-wavefronts': '/onesheet-previews/preview-nazare-wavefronts.webp',
-  'azulejo-algorithms': '/onesheet-previews/preview-azulejo-algorithms.webp',
-  'porto-data-streams': '/onesheet-previews/preview-porto-data-streams.webp',
+  'pastel-de-nata': '/onesheet-previews/preview-pastel-de-nata.png',
+  'nazare-wavefronts': '/onesheet-previews/preview-nazare-wave-systems.png',
+  'azulejo-algorithms': '/onesheet-previews/preview-azulejo-protocols.png',
+  'porto-data-streams': '/onesheet-previews/preview-porto-data-streams.png',
 };
