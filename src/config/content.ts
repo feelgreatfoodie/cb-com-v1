@@ -97,9 +97,9 @@ export const journey = {
 
 export const streamTestimonials: Record<string, { quote: string; author: string; role: string }> = {
   data: {
-    quote: 'A highly skilled senior data engineer with strong expertise in pipelining complex data sources, GCP, BQML and the broader Google ecosystem.',
-    author: 'Brianna Mersey',
-    role: 'VP Data',
+    quote: 'Christian combines deep technical expertise with the ability to translate complex data challenges into practical, scalable solutions.',
+    author: 'Oksana Davydenko',
+    role: 'Digital Analytics Lead',
   },
   sales: {
     quote: "One of the smartest, hardest working, inspiring, and motivating team leaders I've ever hired.",
@@ -107,9 +107,9 @@ export const streamTestimonials: Record<string, { quote: string; author: string;
     role: 'Global Sales & Business Development',
   },
   poker: {
-    quote: 'He is a born leader, a man of true integrity and loyalty, and he brings out the best in those around him.',
-    author: 'Matthew Walvick',
-    role: 'Healthcare Technology Physician',
+    quote: 'When I had everything to learn, Christian gave me a path forward I could not have charted on my own.',
+    author: 'Nyamekye Boaten',
+    role: 'Senior Analyst, Monks',
   },
 };
 
@@ -274,39 +274,33 @@ export const bossfight = {
     },
     {
       quote:
-        'A highly skilled senior data engineer with strong expertise in pipelining complex data sources, GCP, BQML and the broader Google ecosystem. He consistently delivered scalable, efficient solutions while making collaboration easy and enjoyable. Christian brings both technical excellence and great team spirit!',
-      author: 'Brianna Mersey',
-      role: 'VP Data',
+        'Christian combines deep technical expertise with the ability to translate complex data challenges into practical, scalable solutions. He builds real trust with executives and clients \u2014 communicates clearly, stays calm, and inspires confidence in both the strategy and the delivery. He is the kind of leader who makes teams stronger.',
+      author: 'Oksana Davydenko',
+      role: 'Digital Analytics Lead',
     },
     {
       quote:
-        'A naturally curious and technically adept person. He has the capacity to not only complete assigned work but to go more in-depth on topics. Christian is a natural leader who motivates his team to accomplish their goals and have fun doing it. He is an exceptional individual who functions well in both the technical and people realms.',
-      author: 'Craig Quincy',
-      role: 'Engineering Leader',
-    },
-    {
-      quote:
-        'Christian has been terrific to work with. I value his energy for learning, teaching others, and creating an environment where everyone has fun. His thoroughness and attention to detail were key to making a great product. I\'d love to be on a team with him in the future!',
-      author: 'Eric Budd',
-      role: 'Engineering Data Director',
-    },
-    {
-      quote:
-        'One of the smartest, hardest working, inspiring, and motivating team leaders I\'ve ever hired. He\'s very well organized and methodical in his approach, and understands how to build a streamlined, effective, and highly productive business. Christian would be an asset to any team!',
-      author: 'Malek Bishawi',
-      role: 'Global Sales & Business Development',
-    },
-    {
-      quote:
-        'He is a born leader, a man of true integrity and loyalty, and he brings out the best in those around him. Attributes which make him a valuable friend and allow him to excel in business.',
-      author: 'Matthew Walvick',
-      role: 'Healthcare Technology Physician',
+        'When I had everything to learn, Christian gave me a path forward I could not have charted on my own. He did not drag me through tasks \u2014 he taught me to fish. He stays ahead of the industry, champions building things the right way, and produces deliverables that create tangible value for stakeholders.',
+      author: 'Nyamekye Boaten',
+      role: 'Senior Analyst, Monks',
     },
     {
       quote:
         'He has a quality that\'s hard to teach and even harder to find. He is genuine. He is outcome-driven. And he makes the people around him feel seen, heard, and respected. You don\'t just get someone who does the job. You get someone who improves the room. That\'s what creates lasting results.',
       author: 'Rich Luby',
       role: 'Career Services Director',
+    },
+    {
+      quote:
+        'Christian has a strong grasp of technical concepts and designing complex solutions across cloud platforms. He does not shy away from unfamiliar territories \u2014 he quickly masters new areas and translates that knowledge into solutions that deliver real business impact.',
+      author: 'Ahmed Tarek M.',
+      role: 'Director of Data Science, Monks',
+    },
+    {
+      quote:
+        'One of the smartest, hardest working, inspiring, and motivating team leaders I\'ve ever hired. He\'s very well organized and methodical in his approach, and understands how to build a streamlined, effective, and highly productive business. Christian would be an asset to any team!',
+      author: 'Malek Bishawi',
+      role: 'Global Sales & Business Development',
     },
   ],
 } as const;
