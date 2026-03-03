@@ -201,7 +201,7 @@ export const workshop = {
     },
     {
       name: 'CacheBash',
-      description: 'Your AI agents control panel, from your phone.',
+      description: 'Production MCP server with 58 tool endpoints for multi-agent coordination on Claude Code.',
       problem:
         'AI agents need you at your desk. Leave and the conversation ends — questions unanswered, sessions hang, momentum lost.',
       whyNow: 'AI-assisted development is exploding. The tooling assumes you never leave your chair.',
@@ -214,6 +214,16 @@ export const workshop = {
         'cachebash deploy --production',
         'cachebash logs --tail 100',
       ],
+    },
+    {
+      name: 'Client Delivery',
+      description: 'End-to-end AI transformation engagements for enterprise teams.',
+      problem:
+        'Organizations know they need AI but lack internal expertise to move from strategy to production.',
+      whyNow: 'AI adoption is accelerating — teams that wait for perfect readiness get left behind.',
+      tags: ['AI Strategy', 'Enablement', 'Workshops'],
+      image: '/rezzed-preview.svg',
+      url: 'https://rezzed.ai',
     },
     {
       name: 'OptiMeasure',
