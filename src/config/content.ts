@@ -270,7 +270,7 @@ export const bossfight = {
       quote:
         'He does not just build things \u2014 he thinks about the whole system. He went from zero familiarity to owning the implementation within weeks. He moves comfortably between the technical and business sides without losing depth in either. That combination is rare.',
       author: 'Puneet Gangrade',
-      role: 'Data Science & Engineering Lead, Monks (Direct Manager)',
+      role: 'Data Science & Engineering Lead',
     },
     {
       quote:
@@ -295,12 +295,6 @@ export const bossfight = {
         'One of the smartest, hardest working, inspiring, and motivating team leaders I\'ve ever hired. He\'s very well organized and methodical in his approach, and understands how to build a streamlined, effective, and highly productive business. Christian would be an asset to any team!',
       author: 'Malek Bishawi',
       role: 'Global Sales & Business Development',
-    },
-    {
-      quote:
-        'Christian has a stellar personality that draws people in — colleagues enjoy his presence, and clients delight in his genuine, warm temperament. His outstanding commitment to clientele and incredible work ethic are evident at all times.',
-      author: 'Sumer Anelli',
-      role: 'Convention Services Manager',
     },
     {
       quote:
