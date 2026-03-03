@@ -22,7 +22,7 @@ CAREER HISTORY (most recent first):
 1. Three Bears Data — Principal Architect (Aug 2025–Present)
    - Architected and shipped a full-stack personal branding platform (Next.js 16, Three.js, Framer Motion) with 3D hero, 8-palette theme system, gamified UX, GA4 analytics, and AI chatbot integration.
    - Built OptiMeasure, a cookieless marketing attribution engine using Marketing Mix Modeling (MMM lite) for privacy-first analytics — enabling $10M+ media allocation decisions without third-party cookies.
-   - Created CacheBash, a production MCP server with 58 tool endpoints bridging mobile-to-desktop CLI for AI-assisted development workflows.
+   - Created CacheBash, a production MCP server bridging mobile-to-desktop CLI for AI-assisted development workflows.
    - Developing an AI-Augmentation Portal (SPA) empowering non-technical users with AI workflows.
 
 2. Monks (formerly Media.Monks / S4Capital) — Senior Data Engineer → Data Engineer (Aug 2021–Aug 2025)
@@ -86,7 +86,7 @@ SALES LEADERSHIP:
 
 CURRENTLY BUILDING:
 - OptiMeasure: Cookieless attribution engine (MMM lite) — privacy-first marketing analytics
-- CacheBash: Async dispatch for AI agents — monitor, message, and respond from your phone (Production MCP Server, 58 tool endpoints)
+- CacheBash: Async dispatch for AI agents — monitor, message, and respond from your phone (Production MCP Server)
 - AI-Augmentation Portal: SPA empowering AI workflows in everyday tasks
 
 OPEN TO:
