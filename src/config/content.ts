@@ -268,6 +268,12 @@ export const bossfight = {
   testimonials: [
     {
       quote:
+        'He does not just build things \u2014 he thinks about the whole system. He went from zero familiarity to owning the implementation within weeks. He moves comfortably between the technical and business sides without losing depth in either. That combination is rare.',
+      author: 'Puneet Gangrade',
+      role: 'Data Science & Engineering Lead, Monks (Direct Manager)',
+    },
+    {
+      quote:
         'A highly skilled senior data engineer with strong expertise in pipelining complex data sources, GCP, BQML and the broader Google ecosystem. He consistently delivered scalable, efficient solutions while making collaboration easy and enjoyable. Christian brings both technical excellence and great team spirit!',
       author: 'Brianna Mersey',
       role: 'VP Data',
