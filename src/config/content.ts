@@ -395,7 +395,7 @@ export const footer = {
     // Base64-encoded to prevent scraping from static HTML
     emailEncoded: 'Y2hyaXN0aWFuYm91cmxpZXJAZ21haWwuY29t',
     linkedin: 'https://linkedin.com/in/christianbourlier',
-    github: 'https://github.com/feelgreatfoodie',
+    github: 'https://github.com/rezzedai',
     medium: 'https://medium.com/@christianbourlier',
     rezzedai: 'https://rezzed.ai',
     website: 'christianbourlier.com',
