@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { m } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { CanvasErrorBoundary } from './CanvasErrorBoundary';
+import { MetricsBar } from './MetricsBar';
 import { Button } from '@/components/ui/Button';
 import { GlowText } from '@/components/ui/GlowText';
 import { TestimonialCarousel } from '@/components/bossfight/TestimonialCarousel';
@@ -71,6 +72,13 @@ export function HeroSection() {
   const subheadline = overrides.subheadline ?? hero.subheadline;
   const ctaLabel = overrides.ctaLabel ?? hero.cta;
 
+  const metrics = [
+    { value: 58, suffix: '', label: 'MCP TOOLS' },
+    { value: 8, suffix: '+', label: 'YRS ENGINEERING' },
+    { value: 20, suffix: '+', label: 'YRS SALES' },
+    { value: 2, suffix: '', label: 'GCP CERTS' },
+  ] as const;
+
   const handleQuestStart = () => {
     trackEvent('hero_cta_click');
     startQuest();
@@ -112,6 +120,15 @@ export function HeroSection() {
         >
           {subheadline}
         </m.p>
+
+        <m.p
+          variants={fadeInUp}
+          className="mb-4 font-mono text-xs tracking-[0.15em] text-foreground/70 sm:text-sm"
+        >
+          Author of CacheBash — a 58-tool MCP server for multi-agent AI coordination
+        </m.p>
+
+        <MetricsBar metrics={metrics} />
 
         <m.p variants={fadeInUp} className="mb-12 text-xl sm:text-2xl">
           <span className="text-foreground">I build the system </span>

@@ -74,7 +74,7 @@ export const timeline: TimelineEntry[] = [
   {
     year: 2019,
     endYear: 2021,
-    title: 'Data Scientist / TSE',
+    title: 'Technical Solutions Engineer → Data Scientist',
     org: 'MightyHive',
     stream: 'data',
     highlights: [
