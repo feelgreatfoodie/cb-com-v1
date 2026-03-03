@@ -201,7 +201,7 @@ export const workshop = {
     },
     {
       name: 'CacheBash',
-      description: 'Production MCP server with 58 tool endpoints for multi-agent coordination on Claude Code.',
+      description: 'Production MCP server for multi-agent coordination on Claude Code.',
       problem:
         'AI agents need you at your desk. Leave and the conversation ends — questions unanswered, sessions hang, momentum lost.',
       whyNow: 'AI-assisted development is exploding. The tooling assumes you never leave your chair.',
