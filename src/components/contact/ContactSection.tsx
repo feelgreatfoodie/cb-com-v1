@@ -52,7 +52,7 @@ export function ContactSection() {
   const [linkedin, setLinkedin] = useState('');
   const [company, setCompany] = useState('');
   const [message, setMessage] = useState('');
-  const [website, setWebsite] = useState(''); // honeypot
+  const [hpField, setHpField] = useState(''); // honeypot
   const [formState, setFormState] = useState<FormState>('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -113,7 +113,7 @@ export function ContactSection() {
           linkedin: linkedin.trim() || undefined,
           company: company.trim() || undefined,
           message: (challenge.trim() + (message.trim() ? `\n\n${message.trim()}` : '')).trim() || undefined,
-          website: website || undefined,
+          website: hpField || undefined,
         }),
       });
 
@@ -174,11 +174,11 @@ export function ContactSection() {
             <div className="absolute -left-[9999px]" aria-hidden="true">
               <input
                 type="text"
-                name="website"
+                name="url_confirm"
                 tabIndex={-1}
-                autoComplete="off"
-                value={website}
-                onChange={(e) => setWebsite(e.target.value)}
+                autoComplete="new-password"
+                value={hpField}
+                onChange={(e) => setHpField(e.target.value)}
               />
             </div>
 
