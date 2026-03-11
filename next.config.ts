@@ -29,6 +29,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return {
+      afterFiles: [
+        { source: "/ingest/static/:path*", destination: "https://us-assets.i.posthog.com/static/:path*" },
+        { source: "/ingest/:path*", destination: "https://us.i.posthog.com/:path*" },
+      ],
+    };
+  },
   async headers() {
     return [
       {
@@ -71,11 +79,11 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://us.i.posthog.com https://us-assets.i.posthog.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' https: data:",
-              "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com",
+              "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://us.i.posthog.com",
               "frame-src 'self' https://www.youtube.com",
             ].join("; "),
           },

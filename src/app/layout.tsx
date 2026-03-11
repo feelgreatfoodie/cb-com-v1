@@ -8,6 +8,8 @@ import { CookieConsent } from '@/components/ui/CookieConsent';
 import { ToastProvider } from '@/components/ui/Toast';
 import { getStructuredData } from '@/lib/seo/structured-data';
 import { MotionProvider } from '@/components/providers/MotionProvider';
+import { PostHogProvider } from './PostHogProvider';
+import PostHogPageView from './PostHogPageView';
 import './globals.css';
 
 const inter = Inter({
@@ -140,11 +142,14 @@ export default async function RootLayout({
       >
         <WebVitals />
         <CookieConsent />
-        <MotionProvider>
-          <ThemeProvider paletteId={paletteId} colors={palette.colors}>
-            <ToastProvider>{children}</ToastProvider>
-          </ThemeProvider>
-        </MotionProvider>
+        <PostHogProvider>
+          <PostHogPageView />
+          <MotionProvider>
+            <ThemeProvider paletteId={paletteId} colors={palette.colors}>
+              <ToastProvider>{children}</ToastProvider>
+            </ThemeProvider>
+          </MotionProvider>
+        </PostHogProvider>
       </body>
     </html>
   );
